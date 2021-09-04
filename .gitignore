@@ -158,5 +158,3 @@ fabric.properties
 .nfs*
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,linux,clion
-
-ClientBreakout/.idea/
