@@ -1,26 +1,16 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Views/MenuWindow.h"
+
+void runGUI(){
+    MenuWindow *window = new MenuWindow();
+    window->start();
+}
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(600, 500), "Crazy Breakout");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Blue);
-
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+    runGUI();
 
     return 0;
 }
+
