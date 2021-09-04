@@ -1,31 +1,35 @@
-//
-// Created by keyner on 9/3/21.
-//
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #ifndef CLIENTBREAKOUT_GAMEWINDOW_H
 #define CLIENTBREAKOUT_GAMEWINDOW_H
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace std;
 
 class GameWindow{
 
 private:
-
     int width = 1600;
     int height = 900;
     string ip;
     string port;
-    string name;
+    string playerName;
 
 public:
+    GameWindow(string ip, string port, string playerName){
+        this->ip = ip;
+        this->port = port;
+        this->playerName = playerName;
+
+        cout << "IP: " << this->ip << " Port: " << this->port << " Player: " << this->playerName;
+    }
 
     int start(){
-        sf::RenderWindow window(sf::VideoMode(1600, 900), "Crazy Breakout");
+        sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
         sf::Texture gameBackground;
         if (!gameBackground.loadFromFile(
-                "../Resources/Images/MainWindowBackgorund.png"))
+                "../Resources/Images/Backgrounds/MenuBackground.png"))
             return EXIT_FAILURE;
         sf::Sprite gameBackgroundSprite(gameBackground);
 

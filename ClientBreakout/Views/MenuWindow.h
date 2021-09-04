@@ -1,49 +1,71 @@
-//
-// Created by keyner on 9/3/21.
-//
-#include <SFML/Graphics.hpp>
-#include "GameWindow.h"
-#include <iostream>
 #ifndef CLIENTBREAKOUT_MENUWINDOW_H
 #define CLIENTBREAKOUT_MENUWINDOW_H
+
+#include <SFML/Graphics.hpp>
+#include "GameSettingsWindow.h"
+#include <iostream>
 
 using namespace std;
 
 class MenuWindow{
 
 private:
-
     int width = 1600;
     int height = 900;
-    string ip;
-    string port;
-    string name;
 
 public:
-
     int start(){
-        sf::RenderWindow window(sf::VideoMode(1600, 900), "Crazy Breakout");
+        //Creation of the window
+        sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
+        //Load of the background image
         sf::Texture menuBackground;
         if (!menuBackground.loadFromFile(
-                "../Resources/Images/MainWindowBackgorund.png"))
+                "../Resources/Images/Backgrounds/MenuBackground.png"))
             return EXIT_FAILURE;
         sf::Sprite menuBackgroundSprite(menuBackground);
 
-        sf::Font font;
-        if (!font.loadFromFile(
+        //Load of the fonts
+        sf::Font Atarifont;
+        if (!Atarifont.loadFromFile(
                 "../Resources/Fonts/AtariFont.ttf")) {
             window.close();
         }
+        sf::Font AtariClassic;
+        if (!AtariClassic.loadFromFile(
+                "../Resources/Fonts/AtariClassic.ttf")) {
+            window.close();
+        }
 
-        sf::Text BreakoutText;
-        BreakoutText.setFont(font);
-        BreakoutText.setString("CRAZY BREAKOUT");
-        BreakoutText.setCharacterSize(100);
-        BreakoutText.setFillColor(sf::Color::White);
-        BreakoutText.setOutlineColor(sf::Color::Black);
-        BreakoutText.setOutlineThickness(5);
-        BreakoutText.setPosition(110, 160);
+        //Text of the title
+        sf::Text breakoutText;
+        breakoutText.setFont(Atarifont);
+        breakoutText.setString("CRAZY BREAKOUT");
+        breakoutText.setCharacterSize(110);
+        breakoutText.setFillColor(sf::Color::White);
+        breakoutText.setOutlineColor(sf::Color::Black);
+        breakoutText.setOutlineThickness(10);
+        breakoutText.setPosition(65, 160);
+
+        //Text of the creators
+        sf::Text creatorsText;
+        creatorsText.setFont(AtariClassic);
+        creatorsText.setString("by KeynerG & JoseAndres216");
+        creatorsText.setCharacterSize(25);
+        creatorsText.setFillColor(sf::Color::White);
+        creatorsText.setOutlineColor(sf::Color::Black);
+        creatorsText.setOutlineThickness(5);
+        creatorsText.setPosition(450, 400);
+
+        //Text of the play binding
+        sf::Text playText;
+        playText.setFont(AtariClassic);
+        playText.setString("Press any key to start!");
+        playText.setCharacterSize(35);
+        playText.setFillColor(sf::Color::White);
+        playText.setOutlineColor(sf::Color::Black);
+        playText.setOutlineThickness(5);
+        playText.setPosition(400, 750);
 
         while (window.isOpen())
         {
@@ -51,12 +73,12 @@ public:
             while (window.pollEvent(event))
             {
                 if (event.type == sf::Event::KeyReleased) {
-                    if (event.key.code == sf::Keyboard::Enter) { //A binding to go to next window
+                    if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                         window.close();
-                        GameWindow *window = new GameWindow();
+                    }else{ // Any key binding to start the game
+                        window.close();
+                        GameSettingsWindow *window = new GameSettingsWindow();
                         window->start();
-                    }else if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
-                        window.close();
                     }
                 }
                 if (event.type == sf::Event::Closed)
@@ -64,14 +86,22 @@ public:
             }
 
             window.clear();
+
+            //Drawing of the background image
             window.draw(menuBackgroundSprite);
-            window.draw(BreakoutText);
+
+            //Drawing of the title text
+            window.draw(breakoutText);
+
+            //Drawing of the creators text
+            window.draw(creatorsText);
+
+            //Drawing of the play text
+            window.draw(playText);
+
             window.display();
         }
     }
-
 };
-
-
 
 #endif //CLIENTBREAKOUT_MENUWINDOW_H
