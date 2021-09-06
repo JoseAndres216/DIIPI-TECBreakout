@@ -9,11 +9,13 @@ using namespace std;
 
 class MenuWindow{
 
-private:
+private: // Class' attributes
     int width = 1600;
     int height = 900;
 
-public:
+public: //Class' fuctions
+
+    // Function to start the GUI process
     int start(){
         //Creation of the window
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");

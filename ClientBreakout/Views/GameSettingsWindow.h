@@ -9,14 +9,16 @@ using namespace std;
 
 class GameSettingsWindow{
 
-private:
+private: // Class' attributes
     int width = 1600;
     int height = 900;
-    string ip = "";
-    string port = "";
-    string playerName = "";
+    string ip = "IP DE PRUEBA";
+    string port = "PUERTO DE PRUEBA";
+    string playerName = "NOMBRE DE PRUEBA";
 
-public:
+public: // Class' functions
+
+    // Function to start the GUI process
     int start(){
         //Creation of the window
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout Settings");
@@ -115,44 +117,62 @@ public:
         playText.setFillColor(sf::Color::White);
         playText.setOutlineColor(sf::Color::Black);
         playText.setOutlineThickness(5);
-        playText.setPosition(500, 800);
+        playText.setPosition(520, 800);
+
+        //Text of the play binding
+        sf::Text warningText;
+        warningText.setFont(AtariClassic);
+        warningText.setString("");
+        warningText.setCharacterSize(20);
+        warningText.setFillColor(sf::Color::Red);
+        warningText.setOutlineColor(sf::Color::Black);
+        warningText.setOutlineThickness(5);
+        warningText.setPosition(550, 675);
 
         while (window.isOpen())
         {
             sf::Event event;
             while (window.pollEvent(event))
             {
+                // Mouse events to emulate buttons
                 if(event.type == sf::Event::MouseButtonReleased){
                     if(event.mouseButton.button == sf::Mouse::Left){
                         if (event.mouseButton.x >= 400 && event.mouseButton.x <= 1200 && event.mouseButton.y >= 280 &&
-                            event.mouseButton.y <= 380) { //Button for typing player playerName
+                            event.mouseButton.y <= 380) { //Button for typing the player name
                             string playerName;
                             cout << "Player: ";
                             cin >> playerName;
                             this->playerName = playerName;
+                            warningText.setString("");
                             providedPlayernameText.setString(this->playerName);
                         }else if (event.mouseButton.x >= 400 && event.mouseButton.x <= 790 && event.mouseButton.y >= 520 &&
-                                  event.mouseButton.y <= 620) { //Button for typing ip
+                                  event.mouseButton.y <= 620) { //Button for typing the ip
                             string ip;
                             cout << "IP: ";
                             cin >> ip;
                             this->ip = ip;
+                            warningText.setString("");
                             providedIptext.setString(this->ip);
                         }else if (event.mouseButton.x >= 810 && event.mouseButton.x <= 1200 && event.mouseButton.y >= 520 &&
-                                  event.mouseButton.y <= 620) { //Button for typing port
+                                  event.mouseButton.y <= 620) { //Button for typing the port
                             string port;
                             cout << "Port: ";
                             cin >> port;
                             this->port = port;
                             providedPorttext.setString(this->port);
+                            warningText.setString("");
                         }
                     }
                 }
                 if (event.type == sf::Event::KeyReleased) {
                     if(event.key.code == sf::Keyboard::B) { // B Binding to go to game window
-                        window.close();
-                        GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
-                        window->start();
+                        if(this->playerName != "" and this->ip != "" and this->port != ""){ // Validating no blanks
+                            window.close();
+                            GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
+                            window->start();
+                        }else{ // In case of blanks
+                            warningText.setString("Please, fill the blanks.");
+                        }
                     }else if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                         window.close();
                     }
@@ -183,6 +203,9 @@ public:
 
             //Drawing of the play text
             window.draw(playText);
+
+            //Drawing of the warning text
+            window.draw(warningText);
 
             window.display();
         }
