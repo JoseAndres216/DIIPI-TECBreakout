@@ -152,6 +152,8 @@ public: // Class' functions
         sf::RectangleShape bar(sf::Vector2f(300, 25));
         bar.setFillColor(sf::Color::White);
         bar.setPosition(650, 800);
+        bar.setOutlineThickness(2);
+        bar.setOutlineColor(sf::Color::Black);
 
         // Creation of the ball
         sf::CircleShape ball(15);
