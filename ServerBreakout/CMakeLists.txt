@@ -18,5 +18,5 @@ if(SFML_FOUND)
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
 endif()
 
-add_executable(ServerBreakout main.cpp)
+add_executable(ServerBreakout main.cpp DataStructures/SimpleList.h DataStructures/Node.h DataStructures/Matrix.h Logic/GameManager.h Logic/Bar.h Logic/Player.h Logic/Ball.h Logic/Block.h Socket/SocketServer.h)
 target_link_libraries (ServerBreakout sfml-graphics sfml-window sfml-system)

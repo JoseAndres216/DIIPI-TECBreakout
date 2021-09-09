@@ -1,26 +1,8 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include "./Logic/GameManager.h"
 
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode(600, 500), "Crazy Breakout");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Blue);
+using namespace std;
 
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
+int main() {
     return 0;
 }
