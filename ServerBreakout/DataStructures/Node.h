@@ -8,23 +8,23 @@ using namespace std;
 
 class Node {
 private:
-    Block block;
+    Block *block;
     Node *next;
     Node *prev;
 
 public:
     Node(Block *block) {
-        this->block = *block;
+        this->block = block;
         this->next = nullptr;
         this->prev = nullptr;
     }
 
-    Block getBlock() {
+    Block *getBlock() {
         return this->block;
     }
 
     void setBlock(Block *block) {
-        this->block = *block;
+        this->block = block;
     }
 
     Node *getNext() {

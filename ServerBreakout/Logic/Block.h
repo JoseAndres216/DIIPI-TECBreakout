@@ -9,14 +9,12 @@ class Block {
 private:
     int type;
     int resistance;
-    int size;
     int posX;
     int posY;
 public:
     Block() {
         this->type = 0;
         this->resistance = 0;
-        this->size = 0;
         this->posX = 0;
         this->posY = 0;
     }
@@ -24,7 +22,13 @@ public:
     Block(int posX, int posY) {
         this->type = 0;
         this->resistance = 0;
-        this->size = 0;
+        this->posX = posX;
+        this->posY = posY;
+    }
+
+    Block(int posX, int posY, int type) {
+        this->type = type;
+        this->resistance = 0;
         this->posX = posX;
         this->posY = posY;
     }
@@ -43,14 +47,6 @@ public:
 
     void setResistance(int resistance) {
         this->resistance = resistance;
-    }
-
-    int getSize() const {
-        return this->size;
-    }
-
-    void setSize(int size) {
-        this->size = size;
     }
 
     int getPosX() const {

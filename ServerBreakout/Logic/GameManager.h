@@ -2,7 +2,7 @@
 #define SERVERBREAKOUT_GAMEMANAGER_H
 
 #include <iostream>
-#include "../DataStructures/Matrix.h"
+#include "../DataStructures/Matrix/Matrix.h"
 #include "Player.h"
 #include "Bar.h"
 #include "Ball.h"

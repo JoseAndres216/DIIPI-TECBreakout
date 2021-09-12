@@ -1,5 +1,5 @@
-#ifndef SERVERBREAKOUT_SIMPLELIST_H
-#define SERVERBREAKOUT_SIMPLELIST_H
+#ifndef SERVERBREAKOUT_LINKEDLIST_H
+#define SERVERBREAKOUT_LINKEDLIST_H
 
 #include <iostream>
 #include "Node.h"
@@ -7,14 +7,14 @@
 
 using namespace std;
 
-class SimpleList {
+class LinkedList {
 private:
     Node *head;
     Node *tail;
     int len;
 
 public:
-    SimpleList() {
+    LinkedList() {
         this->head = nullptr;
         this->tail = nullptr;
         this->len = 0;
@@ -37,7 +37,7 @@ public:
             bool flag = false;
             Node *aux = this->head;
             while (aux != nullptr) {
-                if (aux->getBlock().getPosX() == posX and aux->getBlock().getPosY() == posY) {
+                if (aux->getBlock()->getPosX() == posX and aux->getBlock()->getPosY() == posY) {
                     flag = true;
                     break;
                 } else {
@@ -45,6 +45,21 @@ public:
                 }
             }
             return flag;
+        } else {
+            cerr << "Couldn't find the element, the list is empty.";
+        }
+    }
+
+    Node *getElement(int posX, int posY) {
+        if (!isEmpty()) {
+            Node *aux = this->head;
+            while (aux != nullptr) {
+                if (aux->getBlock()->getPosX() == posX and aux->getBlock()->getPosY() == posY) {
+                    return aux;
+                } else {
+                    aux = aux->getNext();
+                }
+            }
         } else {
             cerr << "Couldn't find the element, the list is empty.";
         }
@@ -63,6 +78,7 @@ public:
         this->len++;
     }
 
+    /*
     void deleteElement(int posX, int posY) {
         if (!isEmpty()) {
             if (isElement(posX, posY)) {
@@ -98,13 +114,24 @@ public:
             cerr << "Couldn't delete the element, the list is empty.";
         }
     }
+    */
+
+    void deleteElement(int posX, int posY) {
+        if (isElement(posX, posY)) {
+            Node *element = getElement(posX, posY);
+            element->getBlock()->setType(0);
+        } else {
+            cerr << "Couldn't find the element.";
+        }
+    }
 
     void printList() {
         if (!isEmpty()) {
             Node *aux = this->head;
             while (aux != nullptr) {
-                cout << "Element: (X: " << to_string(aux->getBlock().getPosX()) << ", Y: "
-                     << to_string(aux->getBlock().getPosY()) << ") ";
+                cout << "Element: (X: " << to_string(aux->getBlock()->getPosX()) << ", Y: "
+                     << to_string(aux->getBlock()->getPosY()) << ", Type: " << to_string(aux->getBlock()->getType())
+                     << ", Resistance: " << to_string(aux->getBlock()->getResistance()) << ")   ";
                 aux = aux->getNext();
             }
         } else {
@@ -114,4 +141,4 @@ public:
 
 };
 
-#endif //SERVERBREAKOUT_SIMPLELIST_H
+#endif //SERVERBREAKOUT_LINKEDLIST_H
