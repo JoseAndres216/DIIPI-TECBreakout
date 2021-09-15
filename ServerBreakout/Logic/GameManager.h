@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Bar.h"
 #include "Ball.h"
+#include "../Socket/SocketServer.h"
 
 using namespace std;
 
@@ -15,7 +16,9 @@ private:
     Player player;
     Bar bar;
     Ball ball;
+    SocketServer server;
     static GameManager *instance;
+
 
     GameManager() {
         //Asignacion de valores

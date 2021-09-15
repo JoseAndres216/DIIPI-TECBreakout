@@ -167,6 +167,7 @@ public: // Class' functions
                 if (event.type == sf::Event::KeyReleased) {
                     if(event.key.code == sf::Keyboard::B) { // B Binding to go to game window
                         if(this->playerName != "" and this->ip != "" and this->port != ""){ // Validating no blanks
+                            //Make the socket connection
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();
