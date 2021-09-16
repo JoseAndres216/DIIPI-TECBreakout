@@ -19,6 +19,18 @@ public:
         len = 0;
     }
 
+    MatrixNode *getHead() const {
+        return head;
+    }
+
+    MatrixNode *getTail() {
+        return tail;
+    }
+
+    int getLen() {
+        return len;
+    }
+
     bool isEmpty() {
         if (this->len == 0) {
             return true;

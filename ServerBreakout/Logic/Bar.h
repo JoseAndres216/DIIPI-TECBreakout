@@ -31,7 +31,7 @@ public:
     }
 
     void resetSize() {
-        this->size = 300;
+        size = 300;
     }
 
 };

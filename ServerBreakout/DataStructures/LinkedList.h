@@ -2,6 +2,9 @@
 #define SERVERBREAKOUT_LINKEDLIST_H
 
 #include <iostream>
+#include <time.h>
+#include <stdio.h>
+#include <stdio.h>
 #include "Node.h"
 #include "../Logic/Block.h"
 
@@ -18,6 +21,14 @@ public:
         this->head = nullptr;
         this->tail = nullptr;
         this->len = 0;
+    }
+
+    Node *getHead() {
+        return head;
+    }
+
+    Node *getTail() {
+        return tail;
     }
 
     int getLen() {
@@ -125,6 +136,16 @@ public:
         }
     }
 
+    Node *getRandom(){
+        srand(time(NULL));
+        int chosen = rand() % this->len;
+        Node *aux =  this->head;
+        for(int i = 0; i < chosen; i++){
+            aux = aux->getNext();
+        }
+        return aux;
+    }
+
     void printList() {
         if (!isEmpty()) {
             Node *aux = this->head;
@@ -138,6 +159,8 @@ public:
             cerr << "The list is empty.";
         }
     }
+
+
 
 };
 
