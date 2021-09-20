@@ -17,7 +17,6 @@ private:
     Player player;
     Bar bar;
     Ball ball;
-    SocketServer server;
     static GameManager *instance;
 
     GameManager() {

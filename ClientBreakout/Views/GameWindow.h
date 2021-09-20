@@ -3,10 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "../Socket/Client.h"
+#include "../Socket/TypeMessage.h"
 
 using namespace std;
 
-class GameWindow{
+
+class GameWindow {
 
 private: // Class' attributes
     int width = 1600;
@@ -17,21 +20,28 @@ private: // Class' attributes
     int score;
     int lifes;
     int ballDepth;
+    Client *client;
 
 public: // Class' functions
 
+    void RunClient() {
+        Client::getInstance()->InitClient(stoi(port), ip);
+    }
+
     // Class constructor
-    GameWindow(string ip, string port, string playerName){
+    GameWindow(string ip, string port, string playerName) {
         this->ip = ip;
         this->port = port;
         this->playerName = playerName;
         this->score = 0;
         this->lifes = 3;
         this->ballDepth = 0;
+
     }
 
+
     // Function to start the GUI process
-    int start(){
+    int start() {
         // Window creation
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
@@ -160,14 +170,14 @@ public: // Class' functions
         ball.setFillColor(sf::Color::White);
         ball.setPosition(785, 750);
 
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event))
-            {
-                if(event.type == sf::Event::MouseButtonReleased){ // Mouse binding to start game
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
+                    string json = "123456789012345679012345678901234567890";
+                    Client::getInstance()->Send(json.c_str());
                     startGametext.setString("");
-                    startGametext.setPosition(10,10);
+                    startGametext.setPosition(10, 10);
                 }
                 if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                     window.close();
@@ -200,7 +210,7 @@ public: // Class' functions
             window.draw(ballDepthtext);
 
             //Drawing of the blocks
-            for(int i = 100; i<=1400; i+=100){
+            for (int i = 100; i <= 1400; i += 100) {
                 sf::RectangleShape tripleBlock(sf::Vector2f(100, 50));
                 tripleBlock.setPosition(i, 100);
                 tripleBlock.setTexture(&tripleBlocktexture);
@@ -233,8 +243,8 @@ public: // Class' functions
             }
 
             // Drawing of the bar
-            if(event.mouseMove.x > (bar.getSize().x/2) and event.mouseMove.x < (1600 - (bar.getSize().x/2))){
-                bar.setPosition((event.mouseMove.x - (bar.getSize().x/2)), 800);
+            if (event.mouseMove.x > (bar.getSize().x / 2) and event.mouseMove.x < (1600 - (bar.getSize().x / 2))) {
+                bar.setPosition((event.mouseMove.x - (bar.getSize().x / 2)), 800);
             }
             window.draw(bar);
 

@@ -19,5 +19,5 @@ if(SFML_FOUND)
     message(STATUS "SFML_VERSION: ${SFML_VERSION}")
 endif()
 
-add_executable(ClientBreakout main.cpp Views/MenuWindow.h Views/GameWindow.h Views/GameSettingsWindow.h Socket/SocketClient.cpp Socket/SocketClient.h Socket/JsonManagement.h Socket/TypeMessage.h)
+add_executable(ClientBreakout main.cpp Views/MenuWindow.h Views/GameWindow.h Views/GameSettingsWindow.h Socket/Client.cpp Socket/Client.h Socket/JsonManagement.h Socket/TypeMessage.h)
 target_link_libraries (ClientBreakout sfml-graphics sfml-window sfml-system)

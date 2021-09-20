@@ -15,8 +15,8 @@
 using namespace rapidjson;
 using namespace std;
 
-class JSON_Management
-{
+class JSON_Management{
+
 public:
 
     /**
@@ -41,22 +41,7 @@ public:
 
         }
     }
-    static string GetJSONStringArray(string key, const string& jsonString) {
-        rapidjson::Document document;
-        document.Parse<kParseDefaultFlags>(jsonString.c_str());
-        const char* searchedString;
-        if (document.HasMember(key.c_str())) {
-            if (document[key.c_str()].IsString()) {
-                searchedString = document[key.c_str()].GetString();
-                return searchedString;
-            }
-        }
-        else {
-            cout << "ERROR : KEY NOT FOUND" << endl;
-            return " ";
 
-        }
-    }
     /**
    * @brief Method that serializes a TypeMessage.h method to a JSON string
    * @param typemessageObject is the TypeMessage.h object that contains all the information
@@ -97,8 +82,10 @@ public:
         writer.String(message->getRequest().c_str());
 
         writer.EndObject();
+        cout << buffer.GetString() << endl;
 
         return buffer.GetString();
     }
+};
 
 #endif //CLIENTBREAKOUT_JSONMANAGEMENT_H

@@ -4,10 +4,12 @@
 
 #ifndef SERVERBREAKOUT_SOCKETSERVER_H
 #define SERVERBREAKOUT_SOCKETSERVER_H
+
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
 #include <string>
+#include <mutex>
 #include <string.h>
 #include <iostream>
 #include <pthread.h>
@@ -23,25 +25,29 @@ struct socketData {
 
 class SocketServer {
 
-public:
+protected:
 
     SocketServer();
 
-    void run(int port);
+    ~SocketServer();
 
-    void setMessage(const char *msg);
+public:
+
+    void InitServer(int port);
+
+    static SocketServer *getInstance();
+
+    void sendMessage(const char *msg);
+
+    static void *clientController(void *);
 
 private:
 
     int descriptor;
     sockaddr_in info;
     vector<int> clients;
-
-    bool createSocket(int port);
-
-    bool linkKernel();
-
-    static void *clientController(void *obj);
+    static mutex mutex_;
+    static SocketServer *unique_instance;
 
 };
 

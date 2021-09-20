@@ -4,22 +4,27 @@
 #include <SFML/Graphics.hpp>
 #include "GameWindow.h"
 #include <iostream>
+#include <thread>
 
 using namespace std;
 
-class GameSettingsWindow{
+void RunClient(string port, string ip) {
+    Client::getInstance()->InitClient(stoi(port), ip);
+}
+
+class GameSettingsWindow {
 
 private: // Class' attributes
     int width = 1600;
     int height = 900;
-    string ip = "IP DE PRUEBA";
-    string port = "PUERTO DE PRUEBA";
-    string playerName = "NOMBRE DE PRUEBA";
+    string ip = "127.0.0.1";
+    string port = "8080";
+    string playerName = "PLAYER 1";
 
 public: // Class' functions
 
     // Function to start the GUI process
-    int start(){
+    int start() {
         //Creation of the window
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout Settings");
 
@@ -129,14 +134,12 @@ public: // Class' functions
         warningText.setOutlineThickness(5);
         warningText.setPosition(550, 675);
 
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event))
-            {
+            while (window.pollEvent(event)) {
                 // Mouse events to emulate buttons
-                if(event.type == sf::Event::MouseButtonReleased){
-                    if(event.mouseButton.button == sf::Mouse::Left){
+                if (event.type == sf::Event::MouseButtonReleased) {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
                         if (event.mouseButton.x >= 400 && event.mouseButton.x <= 1200 && event.mouseButton.y >= 280 &&
                             event.mouseButton.y <= 380) { //Button for typing the player name
                             string playerName;
@@ -145,16 +148,18 @@ public: // Class' functions
                             this->playerName = playerName;
                             warningText.setString("");
                             providedPlayernameText.setString(this->playerName);
-                        }else if (event.mouseButton.x >= 400 && event.mouseButton.x <= 790 && event.mouseButton.y >= 520 &&
-                                  event.mouseButton.y <= 620) { //Button for typing the ip
+                        } else if (event.mouseButton.x >= 400 && event.mouseButton.x <= 790 &&
+                                   event.mouseButton.y >= 520 &&
+                                   event.mouseButton.y <= 620) { //Button for typing the ip
                             string ip;
                             cout << "IP: ";
                             cin >> ip;
                             this->ip = ip;
                             warningText.setString("");
                             providedIptext.setString(this->ip);
-                        }else if (event.mouseButton.x >= 810 && event.mouseButton.x <= 1200 && event.mouseButton.y >= 520 &&
-                                  event.mouseButton.y <= 620) { //Button for typing the port
+                        } else if (event.mouseButton.x >= 810 && event.mouseButton.x <= 1200 &&
+                                   event.mouseButton.y >= 520 &&
+                                   event.mouseButton.y <= 620) { //Button for typing the port
                             string port;
                             cout << "Port: ";
                             cin >> port;
@@ -165,16 +170,18 @@ public: // Class' functions
                     }
                 }
                 if (event.type == sf::Event::KeyReleased) {
-                    if(event.key.code == sf::Keyboard::B) { // B Binding to go to game window
-                        if(this->playerName != "" and this->ip != "" and this->port != ""){ // Validating no blanks
-                            //Make the socket connection
+                    if (event.key.code == sf::Keyboard::B) { // B Binding to go to game window
+                        if (this->playerName != "" and this->ip != "" and this->port != "") { // Validating no blanks
+
+                            thread socket(RunClient, port, ip);
+                            socket.detach();
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();
-                        }else{ // In case of blanks
+                        } else { // In case of blanks
                             warningText.setString("Please, fill the blanks.");
                         }
-                    }else if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
+                    } else if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                         window.close();
                     }
                 }
