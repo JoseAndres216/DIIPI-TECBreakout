@@ -24,6 +24,9 @@ private:
         //No se para que sirve el constructor con Singleton
     }
 
+    /**
+     * @brief generates matrix based on given quantities.
+     */
     void generateMatrix() {
         int internBlocksperRow = 1;
         int surpriseBlocksperRow = 2;

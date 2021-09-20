@@ -13,6 +13,9 @@ private:
     MatrixNode *tail;
     int len;
 public:
+    /**
+     * @brief Class constructor, getters and setters.
+     */
     Matrix() {
         head = nullptr;
         tail = nullptr;
@@ -31,6 +34,10 @@ public:
         return len;
     }
 
+    /**
+     * @brief function to check if list is empty.
+     * @return returns true if empty and false if there is at least one element.
+     */
     bool isEmpty() {
         if (this->len == 0) {
             return true;
@@ -39,6 +46,9 @@ public:
         }
     }
 
+    /**
+     * @brief Function that adds a row (new element in the main list)
+     */
     void addRow() {
         MatrixNode *element = new MatrixNode(new LinkedList());
         if (isEmpty()) {
@@ -52,6 +62,13 @@ public:
         this->len++;
     }
 
+    /**
+     * @brief Function that adds a new element in an specific row.
+     * @param row
+     * @param posX
+     * @param posY
+     * @param type
+     */
     void addElement(int row, int posX, int posY, int type) {
         if (row <= this->len) {
             MatrixNode *aux = this->head;
@@ -64,6 +81,12 @@ public:
         }
     }
 
+    /**
+     * @brief Function to check if there is an element in the list with the given parameters.
+     * @param posX
+     * @param posY
+     * @return Returns true if could find the element, false if not.
+     */
     bool isElement(int posX, int posY) {
         MatrixNode *aux = this->head;
         while (aux != nullptr) {
@@ -76,6 +99,12 @@ public:
         return false;
     }
 
+    /**
+     * @brief Function to get and specific element, based on the given parameters.
+     * @param posX
+     * @param posY
+     * @return Returns the requested element.
+     */
     MatrixNode *getElement(int posX, int posY) {
         if (isElement(posX, posY)) {
             MatrixNode *aux = this->head;
@@ -91,11 +120,20 @@ public:
         }
     }
 
+    /**
+     * @brief Function to change the type of an specific element to 0, emulating a delete function.
+     * @param posX
+     * @param posY
+     */
     void deleteElement(int posX, int posY) {
         MatrixNode *aux = getElement(posX, posY);
         aux->getLinkedlist()->deleteElement(posX, posY);
     }
 
+    /**
+     * @brief Function to get a random element of the list.
+     * @return Returns the element chosen.
+     */
     void printMatrix() {
         MatrixNode *aux = this->head;
         while (aux != nullptr) {

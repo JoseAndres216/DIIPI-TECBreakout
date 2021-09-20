@@ -17,6 +17,9 @@ private:
     int len;
 
 public:
+    /**
+     * @brief Class constructor, getters and setters
+     */
     LinkedList() {
         this->head = nullptr;
         this->tail = nullptr;
@@ -35,6 +38,10 @@ public:
         return this->len;
     }
 
+    /**
+     * @brief Function to check if list is empty.
+     * @return Returns true if empty and false if there is at least one element.
+     */
     bool isEmpty() {
         if (this->len == 0) {
             return true;
@@ -43,6 +50,12 @@ public:
         }
     }
 
+    /**
+     * @brief Function to check if there is an element in the list with the given parameters.
+     * @param posX
+     * @param posY
+     * @return Returns true if could find the element, false if not.
+     */
     bool isElement(int posX, int posY) {
         if (!isEmpty()) {
             bool flag = false;
@@ -61,6 +74,12 @@ public:
         }
     }
 
+    /**
+     * @brief Function to get and specific element, based on the given parameters.
+     * @param posX
+     * @param posY
+     * @return Returns the requested element.
+     */
     Node *getElement(int posX, int posY) {
         if (!isEmpty()) {
             Node *aux = this->head;
@@ -76,6 +95,10 @@ public:
         }
     }
 
+    /**
+     * @brief Function to add a new element on the list.
+     * @param block
+     */
     void addElement(Block *block) {
         Node *element = new Node(block);
         if (this->head == nullptr) {
@@ -127,6 +150,11 @@ public:
     }
     */
 
+    /**
+     * @brief Function that changes the type of an specific element to 0, emulating a delete function.
+     * @param posX
+     * @param posY
+     */
     void deleteElement(int posX, int posY) {
         if (isElement(posX, posY)) {
             Node *element = getElement(posX, posY);
@@ -136,16 +164,23 @@ public:
         }
     }
 
-    Node *getRandom(){
+    /**
+     * @brief Function to get a random element of the list.
+     * @return Returns the element chosen.
+     */
+    Node *getRandom() {
         srand(time(NULL));
         int chosen = rand() % this->len;
-        Node *aux =  this->head;
-        for(int i = 0; i < chosen; i++){
+        Node *aux = this->head;
+        for (int i = 0; i < chosen; i++) {
             aux = aux->getNext();
         }
         return aux;
     }
 
+    /**
+     * @brief Function that prints the list.
+     */
     void printList() {
         if (!isEmpty()) {
             Node *aux = this->head;
@@ -159,9 +194,6 @@ public:
             cerr << "The list is empty.";
         }
     }
-
-
-
 };
 
 #endif //SERVERBREAKOUT_LINKEDLIST_H
