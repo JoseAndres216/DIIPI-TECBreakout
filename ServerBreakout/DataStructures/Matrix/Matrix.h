@@ -130,6 +130,24 @@ public:
         aux->getLinkedlist()->deleteElement(posX, posY);
     }
 
+    string matrixToString() {
+        string matrix = "";
+        MatrixNode *aux = this->head;
+        while (aux != nullptr) {
+            Node *auxaux = aux->getLinkedlist()->getHead();
+            while (auxaux != nullptr) {
+                string blockInfo =
+                        to_string(auxaux->getBlock()->getPosX()) + "," + to_string(auxaux->getBlock()->getPosY()) +
+                        "," + to_string(auxaux->getBlock()->getType()) + "," +
+                        to_string(auxaux->getBlock()->getResistance()) + ";";
+                matrix.append(blockInfo);
+                auxaux = auxaux->getNext();
+            }
+            aux = aux->getNext();
+        }
+        return matrix;
+    }
+
     /**
      * @brief Function to get a random element of the list.
      * @return Returns the element chosen.

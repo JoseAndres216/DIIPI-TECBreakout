@@ -40,6 +40,7 @@ private:
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if(aux->getBlock()->getType() == 3){
                         aux->getBlock()->setType(4);
+                        aux->getBlock()->setResistance(1);
                     }else{
                         j--;
                     }
@@ -48,6 +49,7 @@ private:
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if(aux->getBlock()->getType() == 3){
                         aux->getBlock()->setType(5);
+                        aux->getBlock()->setResistance(1);
                     }else{
                         j--;
                     }
@@ -62,6 +64,7 @@ private:
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if(aux->getBlock()->getType() == 2){
                         aux->getBlock()->setType(4);
+                        aux->getBlock()->setResistance(1);
                     }else{
                         j--;
                     }
@@ -70,6 +73,7 @@ private:
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if(aux->getBlock()->getType() == 2){
                         aux->getBlock()->setType(5);
+                        aux->getBlock()->setResistance(1);
                     }else{
                         j--;
                     }
@@ -85,6 +89,7 @@ private:
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if(aux->getBlock()->getType() == 1){
                         aux->getBlock()->setType(4);
+                        aux->getBlock()->setResistance(1);
                     }else{
                         j--;
                     }
@@ -94,6 +99,7 @@ private:
                         Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                         if(aux->getBlock()->getType() == 1){
                             aux->getBlock()->setType(5);
+                            aux->getBlock()->setResistance(1);
                         }else{
                             j--;
                         }
@@ -102,6 +108,7 @@ private:
                 y += 50;
             }
         }
+        matrix.matrixToString();
     }
 
 public:

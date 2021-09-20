@@ -14,21 +14,25 @@ private:
 public:
     Block() {
         this->type = 0;
-        this->resistance = 0;
+        this->resistance = 1;
         this->posX = 0;
         this->posY = 0;
     }
 
     Block(int posX, int posY) {
         this->type = 0;
-        this->resistance = 0;
+        this->resistance = 1;
         this->posX = posX;
         this->posY = posY;
     }
 
     Block(int posX, int posY, int type) {
         this->type = type;
-        this->resistance = 0;
+        if(type <= 3){
+            this->resistance = type;
+        }else{
+            this->resistance = 1;
+        }
         this->posX = posX;
         this->posY = posY;
     }
