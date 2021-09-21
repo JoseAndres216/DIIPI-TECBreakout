@@ -108,7 +108,6 @@ private:
                 y += 50;
             }
         }
-        matrix.matrixToString();
     }
 
 public:

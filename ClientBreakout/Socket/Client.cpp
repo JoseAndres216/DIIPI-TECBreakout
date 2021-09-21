@@ -67,13 +67,14 @@ int Client::InitClient(int newPort, string ip) {
         } else {
             //		Display response
             server_response = string(buf, bytesReceived);
+            cout << server_response << endl;
         }
 
     } while (true);
 
 }
 
-string Client::ReadString() {
+string Client::getResponse() {
     return server_response;
 }
 

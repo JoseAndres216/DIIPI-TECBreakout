@@ -14,77 +14,15 @@ class TypeMessage
 
 private:
 
-    string appName;
-    string keyWord;
-    string Path;
-    string firstTime;
-    string clientType;
-    string specificType;
-    string fileName;
-    string request;
+    string matrix;
+
 public:
-    const string &getRequest() const {
-        return request;
+    const string &getMatrix() const {
+        return matrix;
     }
 
-    void setRequest(const string &request) {
-        TypeMessage::request = request;
-    }
-
-    const string &getFileName() const {
-        return fileName;
-    }
-
-    void setFileName(const string &fileName) {
-        TypeMessage::fileName = fileName;
-    }
-
-    const string &getAppName() const {
-        return appName;
-    }
-
-    void setAppName(const string &appName) {
-        TypeMessage::appName = appName;
-    }
-
-    const string &getFirstTime() const {
-        return firstTime;
-    }
-
-    void setFirstTime(const string &firstTime) {
-        TypeMessage::firstTime = firstTime;
-    }
-
-    const string &getClientType() const {
-        return clientType;
-    }
-
-    void setClientType(const string &clientType) {
-        TypeMessage::clientType = clientType;
-    }
-
-    const string &getSpecificType() const {
-        return specificType;
-    }
-
-    void setSpecificType(const string &specificType) {
-        TypeMessage::specificType = specificType;
-    }
-
-    const string &getPath() const {
-        return Path;
-    }
-
-    void setPath(const string &path) {
-        Path = path;
-    }
-
-    const string &getKeyWord() const {
-        return keyWord;
-    }
-
-    void setKeyWord(const string &keyWord) {
-        TypeMessage::keyWord = keyWord;
+    void setMatrix(const string &matrix) {
+        TypeMessage::matrix = matrix;
     }
 
 };

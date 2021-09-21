@@ -1,5 +1,4 @@
 #include <iostream>
-#include "./Logic/GameManager.h"
 #include "DataStructures/Matrix/Matrix.h"
 #include "Socket/SocketServer.h"
 #include <thread>
@@ -12,7 +11,6 @@ int port;
 void RunServer(int port) {
     SocketServer::getInstance()->InitServer(port);
 }
-
 
 int main() {
 

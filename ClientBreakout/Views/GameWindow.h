@@ -174,16 +174,29 @@ public: // Class' functions
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
-                    string json = "123456789012345679012345678901234567890";
-                    Client::getInstance()->Send(json.c_str());
                     startGametext.setString("");
                     startGametext.setPosition(10, 10);
+                    auto collision = new TypeMessage();
+                    collision->setCollision("TRUE");
+                    collision->setX(to_string(100));
+                    collision->setY(to_string(100));
+                    string json = JSON_Management::TypeMessageToJSON(collision);
+                    Client::getInstance()->Send(json.c_str());
                 }
                 if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                     window.close();
                 }
                 if (event.type == sf::Event::Closed)
                     window.close();
+                if (event.type == sf::Event::MouseMoved){
+                    bar.setPosition((sf::Mouse::getPosition(window).x) - bar.getSize().x/2, 800);
+                    if(bar.getPosition().x<0){
+                        bar.setPosition(0, 800);
+                    }
+                    if(bar.getPosition().x>width-bar.getSize().x){
+                        bar.setPosition(width - bar.getSize().x, 800);
+                    }
+                }
             }
 
             window.clear();
@@ -242,10 +255,6 @@ public: // Class' functions
                 window.draw(depthBlock);
             }
 
-            // Drawing of the bar
-            if (event.mouseMove.x > (bar.getSize().x / 2) and event.mouseMove.x < (1600 - (bar.getSize().x / 2))) {
-                bar.setPosition((event.mouseMove.x - (bar.getSize().x / 2)), 800);
-            }
             window.draw(bar);
 
             // Drawing of the ball

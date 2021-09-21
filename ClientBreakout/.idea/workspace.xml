@@ -38,7 +38,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ServerBreakout" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -46,12 +46,12 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="ClientBreakout" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ClientBreakout" TARGET_NAME="ClientBreakout" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ClientBreakout" RUN_TARGET_NAME="ClientBreakout">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ClientBreakout" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ClientBreakout" TARGET_NAME="ClientBreakout" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ClientBreakout" RUN_TARGET_NAME="ClientBreakout">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -74,7 +74,10 @@
       <workItem from="1630712604518" duration="364000" />
       <workItem from="1630715511853" duration="3463000" />
       <workItem from="1631591057475" duration="4148000" />
-      <workItem from="1631634196377" duration="7270000" />
+      <workItem from="1631634196377" duration="8644000" />
+      <workItem from="1632081025697" duration="21005000" />
+      <workItem from="1632124561057" duration="165000" />
+      <workItem from="1632166861125" duration="9201000" />
     </task>
     <servers />
   </component>

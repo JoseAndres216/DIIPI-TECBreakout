@@ -39,7 +39,7 @@ public:
 
     void Send(const char *msg);
 
-    string ReadString();
+    string getResponse();
 
     string setResponse(string newresponse);
 

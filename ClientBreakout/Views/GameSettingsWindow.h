@@ -18,7 +18,7 @@ private: // Class' attributes
     int width = 1600;
     int height = 900;
     string ip = "127.0.0.1";
-    string port = "8080";
+    string port = "9090";
     string playerName = "PLAYER 1";
 
 public: // Class' functions

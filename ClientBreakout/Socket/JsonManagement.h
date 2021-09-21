@@ -57,29 +57,17 @@ public:
 
         writer.StartObject();
 
-        writer.Key("App");
-        writer.String(message->getAppName().c_str());
-
-        writer.Key("Keyword");
-        writer.String(message->getKeyWord().c_str());
-
-        writer.Key("Path");
-        writer.String(message->getPath().c_str());
-
-        writer.Key("First_Time");
+        writer.Key("FirstTime");
         writer.String(message->getFirstTime().c_str());
 
-        writer.Key("Client_Type");
-        writer.String(message->getClientType().c_str());
+        writer.Key("Collision");
+        writer.String(message->getCollision().c_str());
 
-        writer.Key("Specific_Type");
-        writer.String(message->getSpecificType().c_str());
+        writer.Key("X");
+        writer.String(message->getX().c_str());
 
-        writer.Key("Filename");
-        writer.String(message->getFileName().c_str());
-
-        writer.Key("Request");
-        writer.String(message->getRequest().c_str());
+        writer.Key("Y");
+        writer.String(message->getY().c_str());
 
         writer.EndObject();
         cout << buffer.GetString() << endl;

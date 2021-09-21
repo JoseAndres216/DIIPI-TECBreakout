@@ -2,6 +2,8 @@
 // Created by keyner on 9/12/21.
 //
 #include "SocketServer.h"
+#include "../Logic/GameManager.h"
+
 
 SocketServer *SocketServer::unique_instance{nullptr};
 mutex SocketServer::mutex_;
@@ -19,65 +21,79 @@ SocketServer *SocketServer::getInstance() {
 
 void SocketServer::InitServer(int port) {
 
-    descriptor = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (descriptor < 0)
+    socketFd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (socketFd < 0)
         cout << "Error al crear el servidor" << endl;
-    info.sin_family = AF_INET;
-    info.sin_addr.s_addr = INADDR_ANY;
-    info.sin_port = htons(port);
-    memset(&info.sin_zero, 0, sizeof(info.sin_zero));
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(port);
+    memset(&addr.sin_zero, 0, sizeof(addr.sin_zero));
 
 
-    if ((bind(descriptor, (sockaddr *) &info, (socklen_t) sizeof(info))) < 0)
+    if ((bind(socketFd, (sockaddr *) &addr, (socklen_t) sizeof(addr))) < 0)
         cout << "Error al crear el servidor" << endl;
-    listen(descriptor, 4);
+    listen(socketFd, 4);
 
+    cout << "Esperando cliente" << endl;
     while (true) {
-        socketData data;
-        socklen_t t = sizeof(data.info);
-        cout << "Esperando cliente" << endl;
-        data.descriptor = accept(descriptor, (sockaddr *) &data.info, &t);
-        if (data.descriptor < 0) {
+        Client client;
+        socklen_t t = sizeof(client.clientAddr);
+        client.clientFd = accept(socketFd, (sockaddr *) &client.clientAddr, &t);
+        if (client.clientFd < 0) {
             cout << "Error al aceptar el cliente" << endl;
             break;
         } else {
-            clients.push_back(data.descriptor);
+            client_fd = client.clientFd;
             cout << "Cliente conectado" << endl;
             pthread_t thread;
-            pthread_create(&thread, 0, clientController, (void *) &data);
+            pthread_create(&thread, 0, clientController, (void *)&client);
             pthread_detach(thread);
         }
     }
-    close(descriptor);
+    close(socketFd);
 }
 
 void *SocketServer::clientController(void *obj) {
 
-    socketData *data = (socketData *) obj;
+    Client *client = (Client *) obj;
     while (true) {
         string message;
+        string firstTime;
+        string collision;
+        string x;
+        string y;
         char buffer[8192];
         while (1) {
             memset(buffer, 0, 8192);
-            int bytes = recv(data->descriptor, buffer, 8192, 0);
+            int bytes = recv(client->clientFd, buffer, 8192, 0);
             message = string(buffer, 0, bytes);
             if (bytes <= 0) {
-                close(data->descriptor);
+                close(client->clientFd);
                 pthread_exit(NULL);
             }
             if (bytes < 8192) {
                 break;
             }
         }
+        firstTime = JSON_Management::GetJSONString("FirstTime", message);
+        collision = JSON_Management::GetJSONString("Collision", message);
+        x = JSON_Management::GetJSONString("X", message);
+        y = JSON_Management::GetJSONString("Y", message);
+        if(firstTime == "TRUE"){
+            GameManager::getInstance()->initializeComponents();
+            sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
+        }
+        else if(collision == "TRUE"){
+            //GameManager::getInstance()->collideBlock(x,y);
+            //sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
+        }
         cout << message << endl;
     }
-    close(data->descriptor);
-    pthread_exit(NULL);
 }
 
 void SocketServer::sendMessage(const char *msg) {
 
-    for (int i = 0; i < clients.size(); i++) {
-        send(clients[i], msg, strlen(msg), 0);
-    }
+    int res = send(client_fd, msg, strlen(msg), 0);
+    if (res==-1)
+        cout << "Error al enviar mensaje" << endl;
 }

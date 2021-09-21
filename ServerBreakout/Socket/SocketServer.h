@@ -15,12 +15,15 @@
 #include <pthread.h>
 #include <vector>
 #include <unistd.h>
+#include "JsonManagement.h"
+
 
 using namespace std;
+static int client_fd;
 
-struct socketData {
-    int descriptor;
-    sockaddr_in info;
+struct Client {
+    int clientFd;
+    sockaddr_in clientAddr;
 };
 
 class SocketServer {
@@ -31,23 +34,25 @@ protected:
 
     ~SocketServer();
 
+private:
+
+    int socketFd;
+
+    sockaddr_in addr;
+    static mutex mutex_;
+    static SocketServer *unique_instance;
+
 public:
 
     void InitServer(int port);
 
     static SocketServer *getInstance();
 
-    void sendMessage(const char *msg);
+    static void sendMessage(const char *msg);
 
     static void *clientController(void *);
 
-private:
 
-    int descriptor;
-    sockaddr_in info;
-    vector<int> clients;
-    static mutex mutex_;
-    static SocketServer *unique_instance;
 
 };
 

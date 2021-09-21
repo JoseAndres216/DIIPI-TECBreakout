@@ -14,38 +14,12 @@ class TypeMessage
 
 private:
 
-    string appName;
-    string keyWord;
-    string Path;
     string firstTime;
-    string clientType;
-    string specificType;
-    string fileName;
-    string request;
+    string x;
+    string y;
+    string collision;
+
 public:
-    const string &getRequest() const {
-        return request;
-    }
-
-    void setRequest(const string &request) {
-        TypeMessage::request = request;
-    }
-
-    const string &getFileName() const {
-        return fileName;
-    }
-
-    void setFileName(const string &fileName) {
-        TypeMessage::fileName = fileName;
-    }
-
-    const string &getAppName() const {
-        return appName;
-    }
-
-    void setAppName(const string &appName) {
-        TypeMessage::appName = appName;
-    }
 
     const string &getFirstTime() const {
         return firstTime;
@@ -55,36 +29,28 @@ public:
         TypeMessage::firstTime = firstTime;
     }
 
-    const string &getClientType() const {
-        return clientType;
+    const string &getCollision() const {
+        return collision;
     }
 
-    void setClientType(const string &clientType) {
-        TypeMessage::clientType = clientType;
+    void setCollision(const string &collision) {
+        TypeMessage::collision = collision;
     }
 
-    const string &getSpecificType() const {
-        return specificType;
+    const string &getX() const {
+        return x;
     }
 
-    void setSpecificType(const string &specificType) {
-        TypeMessage::specificType = specificType;
+    void setX(const string &x) {
+        TypeMessage::x = x;
     }
 
-    const string &getPath() const {
-        return Path;
+    const string &getY() const {
+        return y;
     }
 
-    void setPath(const string &path) {
-        Path = path;
-    }
-
-    const string &getKeyWord() const {
-        return keyWord;
-    }
-
-    void setKeyWord(const string &keyWord) {
-        TypeMessage::keyWord = keyWord;
+    void setY(const string &y) {
+        TypeMessage::y = y;
     }
 
 };
