@@ -35,6 +35,12 @@ public: // Class' functions
             return EXIT_FAILURE;
         sf::Sprite gameSettingsbackgroundSprite(menuBackground);
 
+        sf::Texture loadingBackground;
+        if (!loadingBackground.loadFromFile(
+                "../Resources/Images/Backgrounds/LoadingBackground.png"))
+            return EXIT_FAILURE;
+        sf::Sprite loadingBackgroundSprite(loadingBackground);
+
         //Load of the fonts
         sf::Font Atarifont;
         if (!Atarifont.loadFromFile(
@@ -175,6 +181,18 @@ public: // Class' functions
 
                             thread socket(RunClient, port, ip);
                             socket.detach();
+
+                            window.clear();
+
+                            playText.setString("Loading game! Please wait...");
+                            playText.setFillColor(sf::Color::Green);
+                            playText.setPosition(300, 400);
+
+                            window.draw(loadingBackgroundSprite);
+                            window.draw(playText);
+
+                            window.display();
+                            sf::sleep(sf::seconds(15));
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <sstream>
 #include "../Socket/Client.h"
 #include "../Socket/TypeMessage.h"
 
@@ -21,11 +22,24 @@ private: // Class' attributes
     int lifes;
     int ballDepth;
     Client *client;
+    vector<string> matrix;
 
 public: // Class' functions
 
     void RunClient() {
         Client::getInstance()->InitClient(stoi(port), ip);
+    }
+
+    void updateMatrix() {
+        string updatedmatrix = Client::getInstance()->getResponse();
+        this->matrix.clear();
+        stringstream ss(updatedmatrix);
+
+        while (ss.good()) {
+            string substr;
+            getline(ss, substr, ';');
+            matrix.push_back(substr);
+        }
     }
 
     // Class constructor
@@ -36,7 +50,7 @@ public: // Class' functions
         this->score = 0;
         this->lifes = 3;
         this->ballDepth = 0;
-
+        updateMatrix();
     }
 
 
@@ -68,34 +82,52 @@ public: // Class' functions
                 "../Resources/Images/Game/SingleBlock.png"))
             return EXIT_FAILURE;
 
-        // Load of the single block texture
+        // Load of the double block texture
         sf::Texture doubleBlocktexture;
         if (!doubleBlocktexture.loadFromFile(
                 "../Resources/Images/Game/DoubleBlock.png"))
             return EXIT_FAILURE;
 
-        // Load of the single block texture
+        // Load of the double block with resistance one texture
+        sf::Texture doubleBlockR1texture;
+        if (!doubleBlockR1texture.loadFromFile(
+                "../Resources/Images/Game/DoubleBlockR1.png"))
+            return EXIT_FAILURE;
+
+        // Load of the triple block texture
+        sf::Texture tripleBlocktexture;
+        if (!tripleBlocktexture.loadFromFile(
+                "../Resources/Images/Game/TripleBlock.png"))
+            return EXIT_FAILURE;
+
+        // Load of the triple block with resistance one texture
+        sf::Texture tripleBlockR1texture;
+        if (!tripleBlockR1texture.loadFromFile(
+                "../Resources/Images/Game/TripleBlockR1.png"))
+            return EXIT_FAILURE;
+
+        // Load of the triple block with resistance two texture
+        sf::Texture tripleBlockR2texture;
+        if (!tripleBlockR2texture.loadFromFile(
+                "../Resources/Images/Game/TripleBlockR2.png"))
+            return EXIT_FAILURE;
+
+        // Load of the intern block texture
         sf::Texture internBlocktexture;
         if (!internBlocktexture.loadFromFile(
                 "../Resources/Images/Game/InternBlock.png"))
             return EXIT_FAILURE;
 
-        // Load of the single block texture
+        // Load of the depth block texture
         sf::Texture depthBlocktexture;
         if (!depthBlocktexture.loadFromFile(
                 "../Resources/Images/Game/DepthBlock.png"))
             return EXIT_FAILURE;
 
-        // Load of the single block texture
+        // Load of the surprise block texture
         sf::Texture surpriseBlocktexture;
         if (!surpriseBlocktexture.loadFromFile(
                 "../Resources/Images/Game/SurpriseBlock.png"))
-            return EXIT_FAILURE;
-
-        // Load of the single block texture
-        sf::Texture tripleBlocktexture;
-        if (!tripleBlocktexture.loadFromFile(
-                "../Resources/Images/Game/TripleBlock.png"))
             return EXIT_FAILURE;
 
         //Text of the player name
@@ -188,12 +220,12 @@ public: // Class' functions
                 }
                 if (event.type == sf::Event::Closed)
                     window.close();
-                if (event.type == sf::Event::MouseMoved){
-                    bar.setPosition((sf::Mouse::getPosition(window).x) - bar.getSize().x/2, 800);
-                    if(bar.getPosition().x<0){
+                if (event.type == sf::Event::MouseMoved) {
+                    bar.setPosition((sf::Mouse::getPosition(window).x) - bar.getSize().x / 2, 800);
+                    if (bar.getPosition().x < 0) {
                         bar.setPosition(0, 800);
                     }
-                    if(bar.getPosition().x>width-bar.getSize().x){
+                    if (bar.getPosition().x > width - bar.getSize().x) {
                         bar.setPosition(width - bar.getSize().x, 800);
                     }
                 }
@@ -223,36 +255,52 @@ public: // Class' functions
             window.draw(ballDepthtext);
 
             //Drawing of the blocks
-            for (int i = 100; i <= 1400; i += 100) {
-                sf::RectangleShape tripleBlock(sf::Vector2f(100, 50));
-                tripleBlock.setPosition(i, 100);
-                tripleBlock.setTexture(&tripleBlocktexture);
-                window.draw(tripleBlock);
+            for (int i = 0; i < matrix.size(); i++) {
+                string blockinfo = matrix[i];
+                vector<string> block;
 
-                sf::RectangleShape doubleBlock(sf::Vector2f(100, 50));
-                doubleBlock.setPosition(i, 150);
-                doubleBlock.setTexture(&doubleBlocktexture);
-                window.draw(doubleBlock);
+                stringstream ss(blockinfo);
 
-                sf::RectangleShape singleBlock(sf::Vector2f(100, 50));
-                singleBlock.setPosition(i, 200);
-                singleBlock.setTexture(&singleBlocktexture);
-                window.draw(singleBlock);
+                while (ss.good()) {
+                    string substr;
+                    getline(ss, substr, ',');
+                    block.push_back(substr);
+                }
 
-                sf::RectangleShape internBlock(sf::Vector2f(100, 50));
-                internBlock.setPosition(i, 250);
-                internBlock.setTexture(&internBlocktexture);
-                window.draw(internBlock);
+                int blockX = stoi(block[0]);
+                int blockY = stoi(block[1]);
+                int blockType = stoi(block[2]);
+                int blockResistance = stoi(block[3]);
 
-                sf::RectangleShape surpirseBlock(sf::Vector2f(100, 50));
-                surpirseBlock.setPosition(i, 300);
-                surpirseBlock.setTexture(&surpriseBlocktexture);
-                window.draw(surpirseBlock);
+                if (blockResistance != 0) {
+                    sf::RectangleShape blockShape(sf::Vector2f(100, 50));
+                    blockShape.setPosition(blockX, blockY);
+                    if (blockType == 1) {
+                        blockShape.setTexture(&singleBlocktexture);
+                    } else if (blockType == 2) {
+                        if (blockResistance == 1) {
+                            blockShape.setTexture(&doubleBlockR1texture);
+                        } else {
+                            blockShape.setTexture(&doubleBlocktexture);
+                        }
+                    } else if (blockType == 3) {
+                        if (blockResistance == 1) {
+                            blockShape.setTexture(&tripleBlockR1texture);
+                        } else if (blockResistance == 2) {
+                            blockShape.setTexture(&tripleBlockR2texture);
+                        } else {
+                            blockShape.setTexture(&tripleBlocktexture);
+                        }
+                    } else if (blockType == 4) {
+                        blockShape.setTexture(&surpriseBlocktexture);
+                    } else if (blockType == 5) {
+                        blockShape.setTexture(&internBlocktexture);
+                    } else if (blockType == 6) {
+                        blockShape.setTexture(&depthBlocktexture);
+                    }
 
-                sf::RectangleShape depthBlock(sf::Vector2f(100, 50));
-                depthBlock.setPosition(i, 350);
-                depthBlock.setTexture(&depthBlocktexture);
-                window.draw(depthBlock);
+                    window.draw(blockShape);
+                }
             }
 
             window.draw(bar);

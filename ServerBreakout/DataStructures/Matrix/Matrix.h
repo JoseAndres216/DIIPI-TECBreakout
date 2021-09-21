@@ -145,6 +145,7 @@ public:
             }
             aux = aux->getNext();
         }
+        matrix.pop_back();
         return matrix;
     }
 
