@@ -23,6 +23,9 @@ private: // Class' attributes
     int ballDepth;
     Client *client;
     vector<string> matrix;
+    bool ballMoves = false;
+    int ballMovementX = 5;
+    int ballMovementY = -5;
 
 public: // Class' functions
 
@@ -58,6 +61,9 @@ public: // Class' functions
     int start() {
         // Window creation
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
+
+        //Window FPS
+        window.setFramerateLimit(60);
 
         // Mouse hiding
         window.setMouseCursorVisible(false);
@@ -206,14 +212,15 @@ public: // Class' functions
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
-                    startGametext.setString("");
+                    ballMoves = true;
+                    /*startGametext.setString("");
                     startGametext.setPosition(10, 10);
                     auto collision = new TypeMessage();
                     collision->setCollision("TRUE");
                     collision->setX(to_string(100));
                     collision->setY(to_string(100));
                     string json = JSON_Management::TypeMessageToJSON(collision);
-                    Client::getInstance()->Send(json.c_str());
+                    Client::getInstance()->Send(json.c_str());*/
                 }
                 if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                     window.close();
@@ -227,6 +234,53 @@ public: // Class' functions
                     }
                     if (bar.getPosition().x > width - bar.getSize().x) {
                         bar.setPosition(width - bar.getSize().x, 800);
+                    }
+                }
+            }
+
+            if (ballMoves) {
+                ball.move(ballMovementX, ballMovementY);
+            }
+
+            if (ball.getPosition().x < 0) {
+                ballMovementX = ballMovementX * -1;
+            } else if (ball.getPosition().x > (width - ball.getRadius())) {
+                ballMovementX = ballMovementX * -1;
+            } else if (ball.getPosition().y < 0) {
+                ballMovementY = ballMovementY * -1;
+            } else if (ball.getPosition().y > height) {
+                ballMovementY = ballMovementY * -1;
+            } else if (ball.getPosition().y == (bar.getPosition().y - ball.getRadius()) and
+                       ball.getPosition().x > bar.getPosition().x and
+                       ball.getPosition().x < (bar.getPosition().x + bar.getSize().x)) {
+                ballMovementY = ballMovementY * -1;
+            } else if (ball.getPosition().x > 100 and ball.getPosition().x < 1500 and ball.getPosition().y > 100 and
+                       ball.getPosition().y < 400) {
+                for (int i = 0; i < matrix.size(); i++) {
+                    string blockinfo = matrix[i];
+                    vector<string> block;
+
+                    stringstream ss(blockinfo);
+
+                    while (ss.good()) {
+                        string substr;
+                        getline(ss, substr, ',');
+                        block.push_back(substr);
+                    }
+
+                    int blockX = stoi(block[0]);
+                    int blockY = stoi(block[1]);
+
+                    if (ball.getPosition().x >= blockX and ball.getPosition().x <= (blockX + 100) and
+                            (ball.getPosition().y + 15) >= blockY and ball.getPosition().y <= (blockY + 50)) {
+                        cout << "Collide on block on x: " << blockX << " and y: " << blockY << endl;
+                        if(ball.getPosition().x == blockX and ball.getPosition().x == (blockX + 100)){
+                            ballMovementX = ballMovementX * -1;
+                        }else if(ball.getPosition().y == blockY and ball.getPosition().y == (blockY + 50)){
+                            ballMovementY = ballMovementY * -1;
+                        } else{
+                            ballMovementY = ballMovementY * -1;
+                        }
                     }
                 }
             }
