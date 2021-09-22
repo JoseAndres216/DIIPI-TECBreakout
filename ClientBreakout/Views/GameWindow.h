@@ -6,6 +6,7 @@
 #include <sstream>
 #include "../Socket/Client.h"
 #include "../Socket/TypeMessage.h"
+#include <thread>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ private: // Class' attributes
     Client *client;
     vector<string> matrix;
     bool ballMoves = false;
-    int ballMovementX = 5;
+    int ballMovementX = 4;
     int ballMovementY = -5;
 
 public: // Class' functions
@@ -213,14 +214,8 @@ public: // Class' functions
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
                     ballMoves = true;
-                    /*startGametext.setString("");
+                    startGametext.setString("");
                     startGametext.setPosition(10, 10);
-                    auto collision = new TypeMessage();
-                    collision->setCollision("TRUE");
-                    collision->setX(to_string(100));
-                    collision->setY(to_string(100));
-                    string json = JSON_Management::TypeMessageToJSON(collision);
-                    Client::getInstance()->Send(json.c_str());*/
                 }
                 if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                     window.close();
@@ -250,12 +245,15 @@ public: // Class' functions
                 ballMovementY = ballMovementY * -1;
             } else if (ball.getPosition().y > height) {
                 ballMovementY = ballMovementY * -1;
-            } else if (ball.getPosition().y == (bar.getPosition().y - ball.getRadius()) and
-                       ball.getPosition().x > bar.getPosition().x and
-                       ball.getPosition().x < (bar.getPosition().x + bar.getSize().x)) {
+
+                // Collision with bar
+            } else if ((ball.getPosition().y + ball.getRadius() * 2) == bar.getPosition().y and
+                       ball.getPosition().x >= bar.getPosition().x and
+                       ball.getPosition().x <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
-            } else if (ball.getPosition().x > 100 and ball.getPosition().x < 1500 and ball.getPosition().y > 100 and
-                       ball.getPosition().y < 400) {
+            } else if ((ball.getPosition().x + ball.getRadius() * 2) >= 100 and ball.getPosition().x <= 1500 and
+                       (ball.getPosition().y + ball.getRadius() * 2) >= 100 and
+                       ball.getPosition().y <= 400) {
                 for (int i = 0; i < matrix.size(); i++) {
                     string blockinfo = matrix[i];
                     vector<string> block;
@@ -270,17 +268,40 @@ public: // Class' functions
 
                     int blockX = stoi(block[0]);
                     int blockY = stoi(block[1]);
+                    int blockR = stoi(block[3]);
 
-                    if (ball.getPosition().x >= blockX and ball.getPosition().x <= (blockX + 100) and
-                            (ball.getPosition().y + 15) >= blockY and ball.getPosition().y <= (blockY + 50)) {
+                    if ((ball.getPosition().x + ball.getRadius() * 2) >= blockX and
+                        ball.getPosition().x <= (blockX + 100) and
+                        (ball.getPosition().y + ball.getRadius() * 2) >= blockY and
+                        ball.getPosition().y <= (blockY + 50) and blockR != 0) {
                         cout << "Collide on block on x: " << blockX << " and y: " << blockY << endl;
-                        if(ball.getPosition().x == blockX and ball.getPosition().x == (blockX + 100)){
+                        cout << "Ball position x: " << ball.getPosition().x << " and y: " << ball.getPosition().y
+                             << endl;
+
+
+                        if ((ball.getPosition().x + ball.getRadius() * 2) == blockX or
+                            ball.getPosition().x == (blockX + 100)) {
                             ballMovementX = ballMovementX * -1;
-                        }else if(ball.getPosition().y == blockY and ball.getPosition().y == (blockY + 50)){
+                        } else if ((ball.getPosition().y + ball.getRadius() * 2) == blockY or
+                                   ball.getPosition().y == (blockY + 50)) {
                             ballMovementY = ballMovementY * -1;
-                        } else{
+                        } else {
+                            ballMovementX = ballMovementX * -1;
                             ballMovementY = ballMovementY * -1;
                         }
+
+                        auto collision = new TypeMessage();
+                        collision->setCollision("TRUE");
+                        collision->setX(to_string(blockX));
+                        collision->setY(to_string(blockY));
+                        string json = JSON_Management::TypeMessageToJSON(collision);
+                        Client::getInstance()->Send(json.c_str());
+
+                        thread t([this]() {
+                            sf::sleep(sf::seconds(1));
+                            updateMatrix();
+                        });
+                        t.detach();
                     }
                 }
             }

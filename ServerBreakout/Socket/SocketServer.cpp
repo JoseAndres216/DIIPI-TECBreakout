@@ -84,8 +84,8 @@ void *SocketServer::clientController(void *obj) {
             sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
         }
         else if(collision == "TRUE"){
-            //GameManager::getInstance()->collideBlock(x,y);
-            //sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
+            GameManager::getInstance()->getMatrix().deleteElement(stoi(x),stoi(y));
+            sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
         }
         cout << message << endl;
     }
