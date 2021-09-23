@@ -29,6 +29,7 @@ public:
         TypeMessage::firstTime = firstTime;
     }
 
+
     const string &getCollision() const {
         return collision;
     }

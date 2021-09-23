@@ -112,44 +112,6 @@ public:
         this->len++;
     }
 
-    /*
-    void deleteElement(int posX, int posY) {
-        if (!isEmpty()) {
-            if (isElement(posX, posY)) {
-                if (this->len == 1) {
-                    this->head = nullptr;
-                    this->tail = nullptr;
-                } else if (this->len >= 2) {
-                    if (this->head->getBlock().getPosX() == posX and this->head->getBlock().getPosY() == posY) {
-                        this->head = this->head->getNext();
-                        this->head->getPrev()->setNext(nullptr);
-                        this->head->setPrev(nullptr);
-                    } else if (this->tail->getBlock().getPosX() == posX and this->tail->getBlock().getPosY() == posY) {
-                        this->tail = this->tail->getPrev();
-                        this->tail->getNext()->setPrev(nullptr);
-                        this->tail->setNext(nullptr);
-                    } else {
-                        Node *aux = this->head->getNext();
-                        while (aux->getBlock().getPosX() != posX and aux->getBlock().getPosY() != posY and
-                               aux != this->tail) {
-                            aux = aux->getNext();
-                        }
-                        aux->getPrev()->setNext(aux->getNext());
-                        aux->getNext()->setPrev(aux->getPrev());
-                        aux->setNext(nullptr);
-                        aux->setPrev(nullptr);
-                    }
-                }
-                this->len--;
-            } else {
-                cerr << "Couldn't find the element, element doesn't exist.";
-            }
-        } else {
-            cerr << "Couldn't delete the element, the list is empty.";
-        }
-    }
-    */
-
     /**
      * @brief Function that changes the type of an specific element to 0, emulating a delete function.
      * @param posX

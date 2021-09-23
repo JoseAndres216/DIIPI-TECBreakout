@@ -9,12 +9,12 @@ class Player {
 private:
     string name;
     int score;
-    int lifes;
+    int lives;
 public:
     Player() {
         this->name = "";
         this->score = 0;
-        this->lifes = 3;
+        this->lives = 3;
     }
 
     const string &getName() const {
@@ -33,12 +33,12 @@ public:
         this->score = score;
     }
 
-    int getLifes() const {
-        return lifes;
+    int getLives() const {
+        return lives;
     }
 
     void setLifes(int lifes) {
-        this->lifes = lifes;
+        this->lives = lifes;
     }
 
     void increaseScore(int increase) {
@@ -46,11 +46,11 @@ public:
     }
 
     void increaseLifes() {
-        this->lifes++;
+        this->lives++;
     }
 
     void decreaseLifes() {
-        this->lifes--;
+        this->lives--;
     }
 };
 

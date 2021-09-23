@@ -11,10 +11,10 @@ private:
 
 public:
     Bar() {
-        size = 300;
+        size = 800;
     }
 
-    int getSize() {
+    const int getSize() const {
         return size;
     }
 
@@ -23,11 +23,11 @@ public:
     }
 
     void increaseSize() {
-        this->size += 25;
+        this->size += 50;
     }
 
     void decreaseSize() {
-        this->size -= 25;
+        this->size -= 50;
     }
 
     void resetSize() {

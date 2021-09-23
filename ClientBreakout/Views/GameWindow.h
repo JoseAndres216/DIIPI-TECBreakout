@@ -7,6 +7,7 @@
 #include "../Socket/Client.h"
 #include "../Socket/TypeMessage.h"
 #include <thread>
+#include "../Socket/JsonManagement.h"
 
 using namespace std;
 
@@ -14,30 +15,29 @@ using namespace std;
 class GameWindow {
 
 private: // Class' attributes
+
     int width = 1600;
     int height = 900;
     string ip;
     string port;
     string playerName;
     int score;
-    int lifes;
+    int lives;
     int ballDepth;
-    Client *client;
     vector<string> matrix;
     bool ballMoves = false;
-    int ballMovementX = 4;
-    int ballMovementY = -5;
+    float ballMovementX = 5;
+    float ballMovementY = -5;
+    int barSizeX = 300;
+    int combo = 0;
 
 public: // Class' functions
 
-    void RunClient() {
-        Client::getInstance()->InitClient(stoi(port), ip);
-    }
-
     void updateMatrix() {
-        string updatedmatrix = Client::getInstance()->getResponse();
+        string response = Client::getInstance()->getResponse();
+        string updatedMatrix = JSON_Management::GetJSONString("Matrix", response);
         this->matrix.clear();
-        stringstream ss(updatedmatrix);
+        stringstream ss(updatedMatrix);
 
         while (ss.good()) {
             string substr;
@@ -46,19 +46,39 @@ public: // Class' functions
         }
     }
 
-    // Class constructor
+    /**
+     *
+     */
+    void updateInterface(){
+        string response = Client::getInstance()->getResponse();
+        this->score = stoi(JSON_Management::GetJSONString("Score", response));
+        this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
+        this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
+        this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
+    }
+
+    /**
+     * @class Constructor of the GameWindow.
+     * @param ip
+     * @param port
+     * @param playerName
+     */
     GameWindow(string ip, string port, string playerName) {
         this->ip = ip;
         this->port = port;
         this->playerName = playerName;
         this->score = 0;
-        this->lifes = 3;
+        this->lives = 3;
         this->ballDepth = 0;
         updateMatrix();
+        updateInterface();
     }
 
 
-    // Function to start the GUI process
+    /**
+     * @brief Function to start the GUI process.
+     * @return
+     */
     int start() {
         // Window creation
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
@@ -84,26 +104,26 @@ public: // Class' functions
         }
 
         // Load of the single block texture
-        sf::Texture singleBlocktexture;
-        if (!singleBlocktexture.loadFromFile(
+        sf::Texture singleBlockTexture;
+        if (!singleBlockTexture.loadFromFile(
                 "../Resources/Images/Game/SingleBlock.png"))
             return EXIT_FAILURE;
 
         // Load of the double block texture
-        sf::Texture doubleBlocktexture;
-        if (!doubleBlocktexture.loadFromFile(
+        sf::Texture doubleBlockTexture;
+        if (!doubleBlockTexture.loadFromFile(
                 "../Resources/Images/Game/DoubleBlock.png"))
             return EXIT_FAILURE;
 
         // Load of the double block with resistance one texture
-        sf::Texture doubleBlockR1texture;
-        if (!doubleBlockR1texture.loadFromFile(
+        sf::Texture doubleBlockR1Texture;
+        if (!doubleBlockR1Texture.loadFromFile(
                 "../Resources/Images/Game/DoubleBlockR1.png"))
             return EXIT_FAILURE;
 
         // Load of the triple block texture
-        sf::Texture tripleBlocktexture;
-        if (!tripleBlocktexture.loadFromFile(
+        sf::Texture tripleBlockTexture;
+        if (!tripleBlockTexture.loadFromFile(
                 "../Resources/Images/Game/TripleBlock.png"))
             return EXIT_FAILURE;
 
@@ -114,48 +134,48 @@ public: // Class' functions
             return EXIT_FAILURE;
 
         // Load of the triple block with resistance two texture
-        sf::Texture tripleBlockR2texture;
-        if (!tripleBlockR2texture.loadFromFile(
+        sf::Texture tripleBlockR2Texture;
+        if (!tripleBlockR2Texture.loadFromFile(
                 "../Resources/Images/Game/TripleBlockR2.png"))
             return EXIT_FAILURE;
 
         // Load of the intern block texture
-        sf::Texture internBlocktexture;
-        if (!internBlocktexture.loadFromFile(
+        sf::Texture internBlockTexture;
+        if (!internBlockTexture.loadFromFile(
                 "../Resources/Images/Game/InternBlock.png"))
             return EXIT_FAILURE;
 
         // Load of the depth block texture
-        sf::Texture depthBlocktexture;
-        if (!depthBlocktexture.loadFromFile(
+        sf::Texture depthBlockTexture;
+        if (!depthBlockTexture.loadFromFile(
                 "../Resources/Images/Game/DepthBlock.png"))
             return EXIT_FAILURE;
 
         // Load of the surprise block texture
-        sf::Texture surpriseBlocktexture;
-        if (!surpriseBlocktexture.loadFromFile(
+        sf::Texture surpriseBlockTexture;
+        if (!surpriseBlockTexture.loadFromFile(
                 "../Resources/Images/Game/SurpriseBlock.png"))
             return EXIT_FAILURE;
 
         //Text of the player name
-        sf::Text playerNametext;
-        playerNametext.setFont(AtariClassic);
-        playerNametext.setString("Player: " + this->playerName);
-        playerNametext.setCharacterSize(20);
-        playerNametext.setFillColor(sf::Color::White);
-        playerNametext.setOutlineColor(sf::Color::Black);
-        playerNametext.setOutlineThickness(5);
-        playerNametext.setPosition(10, 10);
+        sf::Text playerNameText;
+        playerNameText.setFont(AtariClassic);
+        playerNameText.setString("Player: " + this->playerName);
+        playerNameText.setCharacterSize(20);
+        playerNameText.setFillColor(sf::Color::White);
+        playerNameText.setOutlineColor(sf::Color::Black);
+        playerNameText.setOutlineThickness(5);
+        playerNameText.setPosition(10, 10);
 
-        //Text of the player lifes
-        sf::Text lifesText;
-        lifesText.setFont(AtariClassic);
-        lifesText.setString("Lifes: " + to_string(this->lifes));
-        lifesText.setCharacterSize(20);
-        lifesText.setFillColor(sf::Color::White);
-        lifesText.setOutlineColor(sf::Color::Black);
-        lifesText.setOutlineThickness(5);
-        lifesText.setPosition(720, 10);
+        //Text of the player lives
+        sf::Text livesText;
+        livesText.setFont(AtariClassic);
+        livesText.setString("Lives: " + to_string(this->lives));
+        livesText.setCharacterSize(20);
+        livesText.setFillColor(sf::Color::White);
+        livesText.setOutlineColor(sf::Color::Black);
+        livesText.setOutlineThickness(5);
+        livesText.setPosition(720, 10);
 
         //Text of the player score
         sf::Text scoreText;
@@ -168,37 +188,37 @@ public: // Class' functions
         scoreText.setPosition(1350, 10);
 
         //Text of the start game
-        sf::Text startGametext;
-        startGametext.setFont(AtariClassic);
-        startGametext.setString("Click once to start!");
-        startGametext.setCharacterSize(50);
-        startGametext.setFillColor(sf::Color::White);
-        startGametext.setOutlineColor(sf::Color::Black);
-        startGametext.setOutlineThickness(5);
-        startGametext.setPosition(300, 500);
+        sf::Text startGameText;
+        startGameText.setFont(AtariClassic);
+        startGameText.setString("Click once to start!");
+        startGameText.setCharacterSize(50);
+        startGameText.setFillColor(sf::Color::White);
+        startGameText.setOutlineColor(sf::Color::Black);
+        startGameText.setOutlineThickness(5);
+        startGameText.setPosition(300, 500);
 
         //Text of the ip and port connection
-        sf::Text ipPorttext;
-        ipPorttext.setFont(AtariClassic);
-        ipPorttext.setString("Connected to " + this->ip + " on port " + this->port);
-        ipPorttext.setCharacterSize(10);
-        ipPorttext.setFillColor(sf::Color::Green);
-        ipPorttext.setOutlineColor(sf::Color::Black);
-        ipPorttext.setOutlineThickness(2.5);
-        ipPorttext.setPosition(10, 880);
+        sf::Text ipPortText;
+        ipPortText.setFont(AtariClassic);
+        ipPortText.setString("Connected to " + this->ip + " on port " + this->port);
+        ipPortText.setCharacterSize(10);
+        ipPortText.setFillColor(sf::Color::Green);
+        ipPortText.setOutlineColor(sf::Color::Black);
+        ipPortText.setOutlineThickness(2.5);
+        ipPortText.setPosition(10, 880);
 
         //Text of the ball depth
-        sf::Text ballDepthtext;
-        ballDepthtext.setFont(AtariClassic);
-        ballDepthtext.setString("Ball depth: " + to_string(this->ballDepth));
-        ballDepthtext.setCharacterSize(20);
-        ballDepthtext.setFillColor(sf::Color::White);
-        ballDepthtext.setOutlineColor(sf::Color::Black);
-        ballDepthtext.setOutlineThickness(5);
-        ballDepthtext.setPosition(1330, 870);
+        sf::Text ballDepthText;
+        ballDepthText.setFont(AtariClassic);
+        ballDepthText.setString("Ball depth: " + to_string(this->ballDepth));
+        ballDepthText.setCharacterSize(20);
+        ballDepthText.setFillColor(sf::Color::White);
+        ballDepthText.setOutlineColor(sf::Color::Black);
+        ballDepthText.setOutlineThickness(5);
+        ballDepthText.setPosition(1330, 870);
 
         // Creation of the bar
-        sf::RectangleShape bar(sf::Vector2f(300, 25));
+        sf::RectangleShape bar(sf::Vector2f(barSizeX, 25));
         bar.setFillColor(sf::Color::White);
         bar.setPosition(650, 800);
         bar.setOutlineThickness(2);
@@ -214,8 +234,7 @@ public: // Class' functions
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
                     ballMoves = true;
-                    startGametext.setString("");
-                    startGametext.setPosition(10, 10);
+                    startGameText.setString("");
                 }
                 if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                     window.close();
@@ -232,11 +251,9 @@ public: // Class' functions
                     }
                 }
             }
-
             if (ballMoves) {
                 ball.move(ballMovementX, ballMovementY);
             }
-
             if (ball.getPosition().x < 0) {
                 ballMovementX = ballMovementX * -1;
             } else if (ball.getPosition().x > (width - ball.getRadius())) {
@@ -251,14 +268,19 @@ public: // Class' functions
                        ball.getPosition().x >= bar.getPosition().x and
                        ball.getPosition().x <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
+                combo++;
+                if(combo%10 == 0){
+                    ballMovementX = ballMovementX*1.5;
+                    ballMovementY = ballMovementY*1.5;
+                }
             } else if ((ball.getPosition().x + ball.getRadius() * 2) >= 100 and ball.getPosition().x <= 1500 and
                        (ball.getPosition().y + ball.getRadius() * 2) >= 100 and
                        ball.getPosition().y <= 400) {
                 for (int i = 0; i < matrix.size(); i++) {
-                    string blockinfo = matrix[i];
+                    string blockInfo = matrix[i];
                     vector<string> block;
 
-                    stringstream ss(blockinfo);
+                    stringstream ss(blockInfo);
 
                     while (ss.good()) {
                         string substr;
@@ -300,11 +322,13 @@ public: // Class' functions
                         thread t([this]() {
                             sf::sleep(sf::seconds(1));
                             updateMatrix();
+                            updateInterface();
                         });
                         t.detach();
                     }
                 }
             }
+            bar.setSize(sf::Vector2f(barSizeX,25));
 
             window.clear();
 
@@ -312,29 +336,29 @@ public: // Class' functions
             window.draw(gameBackgroundSprite);
 
             // Drawing of the player name text
-            window.draw(playerNametext);
+            window.draw(playerNameText);
 
             // Drawing of the player score text
             window.draw(scoreText);
 
             // Drawing of the start game text
-            window.draw(startGametext);
+            window.draw(startGameText);
 
             // Drawing of the ip and port text
-            window.draw(ipPorttext);
+            window.draw(ipPortText);
 
-            // Drawing of the player lifes text
-            window.draw(lifesText);
+            // Drawing of the player lives text
+            window.draw(livesText);
 
             // Drawing of the ball depth text
-            window.draw(ballDepthtext);
+            window.draw(ballDepthText);
 
             //Drawing of the blocks
             for (int i = 0; i < matrix.size(); i++) {
-                string blockinfo = matrix[i];
+                string blockInfo = matrix[i];
                 vector<string> block;
 
-                stringstream ss(blockinfo);
+                stringstream ss(blockInfo);
 
                 while (ss.good()) {
                     string substr;
@@ -351,27 +375,27 @@ public: // Class' functions
                     sf::RectangleShape blockShape(sf::Vector2f(100, 50));
                     blockShape.setPosition(blockX, blockY);
                     if (blockType == 1) {
-                        blockShape.setTexture(&singleBlocktexture);
+                        blockShape.setTexture(&singleBlockTexture);
                     } else if (blockType == 2) {
                         if (blockResistance == 1) {
-                            blockShape.setTexture(&doubleBlockR1texture);
+                            blockShape.setTexture(&doubleBlockR1Texture);
                         } else {
-                            blockShape.setTexture(&doubleBlocktexture);
+                            blockShape.setTexture(&doubleBlockTexture);
                         }
                     } else if (blockType == 3) {
                         if (blockResistance == 1) {
                             blockShape.setTexture(&tripleBlockR1texture);
                         } else if (blockResistance == 2) {
-                            blockShape.setTexture(&tripleBlockR2texture);
+                            blockShape.setTexture(&tripleBlockR2Texture);
                         } else {
-                            blockShape.setTexture(&tripleBlocktexture);
+                            blockShape.setTexture(&tripleBlockTexture);
                         }
                     } else if (blockType == 4) {
-                        blockShape.setTexture(&surpriseBlocktexture);
+                        blockShape.setTexture(&surpriseBlockTexture);
                     } else if (blockType == 5) {
-                        blockShape.setTexture(&internBlocktexture);
+                        blockShape.setTexture(&internBlockTexture);
                     } else if (blockType == 6) {
-                        blockShape.setTexture(&depthBlocktexture);
+                        blockShape.setTexture(&depthBlockTexture);
                     }
 
                     window.draw(blockShape);

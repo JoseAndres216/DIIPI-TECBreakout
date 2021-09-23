@@ -12,11 +12,14 @@
 using namespace std;
 
 class GameManager {
+
 private:
-    Matrix matrix;
-    Player player;
+
     Bar bar;
     Ball ball;
+    Matrix matrix;
+    Player player;
+
     static GameManager *instance;
 
     GameManager() {
@@ -111,6 +114,7 @@ private:
     }
 
 public:
+
     static GameManager *getInstance() {
         if (instance == 0) {
             instance = new GameManager();
@@ -127,8 +131,34 @@ public:
         this->generateMatrix();
         //Se etablecen los datos del jugador provenientes del socket
     }
+
+    const Player getPlayer() const {
+        return player;
+    }
+
+    void setPlayer(const Player &player) {
+        this->player = player;
+    }
+
+    const Bar getBar() const {
+        return bar;
+    }
+
+    void setBar(const Bar &bar) {
+        this->bar = bar;
+    }
+
+    const Ball getBall() const {
+        return ball;
+    }
+
+    void setBall(const Ball &ball) {
+        this->ball = ball;
+    }
+
 };
 
 GameManager *GameManager::instance = 0;
+
 
 #endif //SERVERBREAKOUT_GAMEMANAGER_H

@@ -5,25 +5,45 @@
 
 using namespace std;
 
+/**
+ * @class
+ */
 class Ball {
+
 private:
-    int speed;
+
+    float speedX;
+
+    float speedY;
+
     int depth;
+
 public:
+
     Ball() {
-        this->speed = 5;
+        this->speedX = 5;
+        this->speedY = -5;
         this->depth = 0;
     }
 
-    int getSpeed() {
-        return speed;
+
+    const float getSpeedX() const {
+        return speedX;
     }
 
-    void setSpeed(int speed) {
-        this->speed = speed;
+    void setSpeedX(const float &speedX) {
+        Ball::speedX = speedX;
     }
 
-    int getDepth() {
+    const float getSpeedY() const {
+        return speedY;
+    }
+
+    void setSpeedY(const float &speedY) {
+        Ball::speedY = speedY;
+    }
+
+    const int getDepth() const {
         return depth;
     }
 
@@ -32,15 +52,18 @@ public:
     }
 
     void increaseSpeed() {
-        this->speed += 10;
+        this->speedX += speedX*1.2;
+        this->speedY += speedX*1.2;
     }
 
     void decreaseSpeed() {
-        this->speed -= 10;
+        this->speedX = speedX/1.2;
+        this->speedY = speedY/1.2;
     }
 
     void resetSpeed() {
-        this->speed = 5;
+        this->speedX = 5;
+        this->speedY = -5;
     }
 
     void increaseDepth() {

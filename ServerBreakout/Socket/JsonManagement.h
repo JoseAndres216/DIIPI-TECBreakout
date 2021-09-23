@@ -15,32 +15,20 @@
 using namespace rapidjson;
 using namespace std;
 
+/**
+ * @class Class that makes a parse to Json of the TypeMessage object.
+ */
 class JSON_Management {
+
 public:
 
     /**
      * @brief Method that gets the key searched from the JSON.
-     * @param key the string that gets searched
-     * @param jsonString  the JSON where the search is done
+     * @param key the string that gets searched.
+     * @param jsonString  the JSON where the search is done.
      * @return the string key from the JSON.
      */
     static string GetJSONString(string key, const string &jsonString) {
-        rapidjson::Document document;
-        document.Parse<kParseDefaultFlags>(jsonString.c_str());
-        const char *searchedString;
-        if (document.HasMember(key.c_str())) {
-            if (document[key.c_str()].IsString()) {
-                searchedString = document[key.c_str()].GetString();
-                return searchedString;
-            }
-        } else {
-            cout << "ERROR : KEY NOT FOUND" << endl;
-            return " ";
-
-        }
-    }
-
-    static string GetJSONStringArray(string key, const string &jsonString) {
         rapidjson::Document document;
         document.Parse<kParseDefaultFlags>(jsonString.c_str());
         const char *searchedString;
@@ -73,6 +61,21 @@ public:
 
         writer.Key("Matrix");
         writer.String(message->getMatrix().c_str());
+
+        writer.Key("Score");
+        writer.String(message->getScore().c_str());
+
+        writer.Key("BallMovement");
+        writer.String(message->getBallMovement().c_str());
+
+        writer.Key("BarSize");
+        writer.String(message->getBarSize().c_str());
+
+        writer.Key("Lives");
+        writer.String(message->getLives().c_str());
+
+        writer.Key("Depth");
+        writer.String(message->getDepth().c_str());
 
         writer.EndObject();
 

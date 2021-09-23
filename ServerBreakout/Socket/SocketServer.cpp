@@ -8,17 +8,31 @@
 SocketServer *SocketServer::unique_instance{nullptr};
 mutex SocketServer::mutex_;
 
+/**
+ *
+ */
 SocketServer::SocketServer() {}
 
+/**
+ *
+ */
 SocketServer::~SocketServer() {}
 
+
+/**
+ *
+ * @return
+ */
 SocketServer *SocketServer::getInstance() {
     lock_guard<std::mutex> lock(mutex_);
     if (unique_instance == nullptr) { unique_instance = new SocketServer(); }
     return unique_instance;
 }
 
-
+/**
+ *
+ * @param port
+ */
 void SocketServer::InitServer(int port) {
 
     socketFd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -53,6 +67,11 @@ void SocketServer::InitServer(int port) {
     close(socketFd);
 }
 
+/**
+ *
+ * @param obj
+ * @return
+ */
 void *SocketServer::clientController(void *obj) {
 
     Client *client = (Client *) obj;
@@ -81,16 +100,37 @@ void *SocketServer::clientController(void *obj) {
         y = JSON_Management::GetJSONString("Y", message);
         if(firstTime == "TRUE"){
             GameManager::getInstance()->initializeComponents();
-            sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
+            auto firstTimeMessage = new TypeMessage();
+            firstTimeMessage->setMatrix(GameManager::getInstance()->getMatrix().matrixToString());
+            firstTimeMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
+            //firstTimeMessage->setBallMovement(to_string(GameManager::getInstance()));
+            firstTimeMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
+            firstTimeMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
+            firstTimeMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
+            string json = JSON_Management::TypeMessageToJSON(firstTimeMessage);
+            sendMessage(json.c_str());
         }
         else if(collision == "TRUE"){
+
             GameManager::getInstance()->getMatrix().deleteElement(stoi(x),stoi(y));
-            sendMessage(GameManager::getInstance()->getMatrix().matrixToString().c_str());
+            auto collisionMessage = new TypeMessage();
+            collisionMessage->setMatrix(GameManager::getInstance()->getMatrix().matrixToString());
+            collisionMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
+            //collisionMessage->setBallMovement(to_string(GameManager::getInstance()->getBall().getSpeedX()));
+            collisionMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
+            collisionMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
+            collisionMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
+            string json = JSON_Management::TypeMessageToJSON(collisionMessage);
+            sendMessage(json.c_str());
         }
         cout << message << endl;
     }
 }
 
+/**
+ *
+ * @param msg
+ */
 void SocketServer::sendMessage(const char *msg) {
 
     int res = send(client_fd, msg, strlen(msg), 0);
