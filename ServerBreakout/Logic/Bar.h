@@ -5,11 +5,20 @@
 
 using namespace std;
 
+/**
+ * @class This class is an abstraction of a bar.
+ */
 class Bar {
+
 private:
+
     int size;
 
 public:
+
+    /**
+     * @brief Class constructor, getters and setters,
+     */
     Bar() {
         size = 800;
     }
@@ -22,14 +31,24 @@ public:
         this->size = size;
     }
 
+    /**
+     * @brief Function to increase the lives.
+     */
     void increaseSize() {
         this->size += 50;
     }
 
+    /**
+     * @brief Function to increase the lives.
+     * @
+     */
     void decreaseSize() {
         this->size -= 50;
     }
 
+    /**
+     * @brief Function to increase the lives.
+     */
     void resetSize() {
         size = 300;
     }

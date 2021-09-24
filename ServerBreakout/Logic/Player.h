@@ -5,24 +5,24 @@
 
 using namespace std;
 
+/**
+ * @class This class is an abstraction of a player.
+ */
 class Player {
+
 private:
-    string name;
+
     int score;
     int lives;
+
 public:
-    Player() {
-        this->name = "";
+
+    /**
+     * @brief Class constructor, getters and setters,
+     */
+    Player(){
         this->score = 0;
         this->lives = 3;
-    }
-
-    const string &getName() const {
-        return name;
-    }
-
-    void setName(string name) {
-        this->name = name;
     }
 
     int getScore() const {
@@ -37,19 +37,28 @@ public:
         return lives;
     }
 
-    void setLifes(int lifes) {
-        this->lives = lifes;
+    void setLives(int lives) {
+        this->lives = lives;
     }
 
+    /**
+     * @brief Function to increase the score.
+     */
     void increaseScore(int increase) {
         this->score += increase;
     }
 
-    void increaseLifes() {
+    /**
+     * @brief Function to increase the lives.
+     */
+    void increaseLives() {
         this->lives++;
     }
 
-    void decreaseLifes() {
+    /**
+     * @brief Function to decrease the lives.
+     */
+    void decreaseLives() {
         this->lives--;
     }
 };

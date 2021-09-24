@@ -6,13 +6,23 @@
 
 using namespace std;
 
+/**
+ * @class This class is an implementation of a node that contain instances of Block class.
+ */
 class Node {
+
 private:
+
     Block *block;
     Node *next;
     Node *prev;
 
 public:
+
+    /**
+     * @brief Class constructor, getters and setters.
+     * @param block
+     */
     Node(Block *block) {
         this->block = block;
         this->next = nullptr;

@@ -7,12 +7,19 @@
 
 using namespace std;
 
+/**
+ * @class This class is an implementation of a Matrix that contain MatrixNode elements.
+ */
 class Matrix {
+
 private:
+
     MatrixNode *head;
     MatrixNode *tail;
     int len;
+
 public:
+
     /**
      * @brief Class constructor, getters and setters.
      */

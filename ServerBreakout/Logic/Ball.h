@@ -6,7 +6,7 @@
 using namespace std;
 
 /**
- * @class
+ * @class This class is an abstraction of a Ball.
  */
 class Ball {
 
@@ -20,6 +20,9 @@ private:
 
 public:
 
+    /**
+     * @brief Class constructor, getters and setters.
+     */
     Ball() {
         this->speedX = 5;
         this->speedY = -5;
@@ -49,21 +52,6 @@ public:
 
     void setDepth(int depth) {
         this->depth = depth;
-    }
-
-    void increaseSpeed() {
-        this->speedX += speedX*1.2;
-        this->speedY += speedX*1.2;
-    }
-
-    void decreaseSpeed() {
-        this->speedX = speedX/1.2;
-        this->speedY = speedY/1.2;
-    }
-
-    void resetSpeed() {
-        this->speedX = 5;
-        this->speedY = -5;
     }
 
     void increaseDepth() {

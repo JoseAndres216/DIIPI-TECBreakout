@@ -9,19 +9,19 @@ SocketServer *SocketServer::unique_instance{nullptr};
 mutex SocketServer::mutex_;
 
 /**
- *
+ * @brief Constructor of the class.
  */
 SocketServer::SocketServer() {}
 
 /**
- *
+ * @brief Destructor of the class.
  */
 SocketServer::~SocketServer() {}
 
 
 /**
- *
- * @return
+ * @brief Method for get the instance of the current unique instance.
+ * @return SocketServer
  */
 SocketServer *SocketServer::getInstance() {
     lock_guard<std::mutex> lock(mutex_);
@@ -30,7 +30,7 @@ SocketServer *SocketServer::getInstance() {
 }
 
 /**
- *
+ * @brief This method create a create a socket and search for possible client connection.
  * @param port
  */
 void SocketServer::InitServer(int port) {
@@ -68,7 +68,7 @@ void SocketServer::InitServer(int port) {
 }
 
 /**
- *
+ * @brief This method runs in a thread and is in charge of read and call the sendMessage function.
  * @param obj
  * @return
  */

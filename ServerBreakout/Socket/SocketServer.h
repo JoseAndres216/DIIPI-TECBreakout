@@ -26,18 +26,26 @@ struct Client {
     sockaddr_in clientAddr;
 };
 
+/**
+ * This class is the creator of the socket and is in charge for manage the communication with the client.
+ */
 class SocketServer {
 
 protected:
 
+    /**
+     * @brief Class constructor.
+     */
     SocketServer();
 
+    /**
+     * @brief Class destructor.
+     */
     ~SocketServer();
 
 private:
 
     int socketFd;
-
     sockaddr_in addr;
     static mutex mutex_;
     static SocketServer *unique_instance;

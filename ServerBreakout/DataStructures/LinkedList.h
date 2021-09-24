@@ -10,13 +10,19 @@
 
 using namespace std;
 
+/**
+ * @class This class is an integration of a linked list to allocate the Nodes.
+ */
 class LinkedList {
+
 private:
+
     Node *head;
     Node *tail;
     int len;
 
 public:
+
     /**
      * @brief Class constructor, getters and setters
      */

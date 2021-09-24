@@ -46,7 +46,7 @@ public:
 
     /**
    * @brief Method that serializes a TypeMessage.h method to a JSON string
-   * @param typemessageObject is the TypeMessage.h object that contains all the information
+   * @param TypeMessageObject is the TypeMessage.h object that contains all the information
    * @return the serialized object into a JSON string
    */
     static string TypeMessageToJSON(TypeMessage *message) {

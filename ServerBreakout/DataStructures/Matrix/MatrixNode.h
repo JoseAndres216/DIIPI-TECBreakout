@@ -6,13 +6,23 @@
 
 using namespace std;
 
+/**
+ * @class This class is an implementation of a Node in the Matrix that contains a linked list.
+ */
 class MatrixNode {
+
 private:
+
     LinkedList *linkedList;
     MatrixNode *next;
     MatrixNode *prev;
 
 public:
+
+    /**
+     * @brief Class constructor, getters and setters.
+     * @param linkedList
+     */
     MatrixNode(LinkedList *linkedList) {
         this->linkedList = linkedList;
         this->next = nullptr;

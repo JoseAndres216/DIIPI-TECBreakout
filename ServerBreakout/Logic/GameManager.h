@@ -11,6 +11,9 @@
 
 using namespace std;
 
+/**
+ * @class This class is in charge for manage all the logic associated this the game.
+ */
 class GameManager {
 
 private:
@@ -19,15 +22,15 @@ private:
     Ball ball;
     Matrix matrix;
     Player player;
-
     static GameManager *instance;
 
-    GameManager() {
-        //No se para que sirve el constructor con Singleton
-    }
+    /**
+     * @brief Class constructor.
+     */
+    GameManager() {}
 
     /**
-     * @brief generates matrix based on given quantities.
+     * @brief Generates matrix based on given quantities.
      */
     void generateMatrix() {
         int internBlocksperRow = 1;
@@ -115,6 +118,10 @@ private:
 
 public:
 
+    /**
+     * @brief Function to get the unique instance of the class GameManager.
+     * @return GameManager
+     */
     static GameManager *getInstance() {
         if (instance == 0) {
             instance = new GameManager();
@@ -127,9 +134,11 @@ public:
         return matrix;
     }
 
+    /**
+     * @brief Function made for get access to the generateMatrix Function.
+     */
     void initializeComponents(){
         this->generateMatrix();
-        //Se etablecen los datos del jugador provenientes del socket
     }
 
     const Player getPlayer() const {
