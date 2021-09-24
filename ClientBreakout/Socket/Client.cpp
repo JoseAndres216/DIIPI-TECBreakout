@@ -1,19 +1,21 @@
-//
-// Created by keyner on 9/13/21.
-//
-
 #include "Client.h"
 
 Client *Client::unique_instance{nullptr};
 mutex Client::mutex_;
 
+/**
+ * @brief Client constructor.
+ */
 Client::Client() {}
 
+/**
+ * @brief Client destructor.
+ */
 Client::~Client() {}
 
 /**
- * @brief Getter for the unique instance of the client
- * @return the client instance
+ * @brief Getter for the unique instance of the client.
+ * @return the client instance.
  */
 Client *Client::getInstance() {
     lock_guard<std::mutex> lock(mutex_);
@@ -21,6 +23,10 @@ Client *Client::getInstance() {
     return unique_instance;
 }
 
+/**
+ * @brief Function to send a message to server.
+ * @param msg
+ */
 void Client::Send(const char *msg) {
     int sendRes = send(clientSocket, msg, strlen(msg), 0);
     if (sendRes == -1) {
@@ -28,6 +34,12 @@ void Client::Send(const char *msg) {
     }
 }
 
+/**
+ * @brief Function to run the client and connect to server.
+ * @param newPort
+ * @param ip
+ * @return
+ */
 int Client::InitClient(int newPort, string ip) {
 
     if (clientSocket == -1) {
@@ -74,10 +86,19 @@ int Client::InitClient(int newPort, string ip) {
 
 }
 
+/**
+ * @brief Response getter.
+ * @return The response from server.
+ */
 string Client::getResponse() {
     return server_response;
 }
 
+/**
+ * @brief Response setter.
+ * @param newresponse
+ * @return
+ */
 string Client::setResponse(string newresponse) {
     server_response = newresponse;
 }

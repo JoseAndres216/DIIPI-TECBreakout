@@ -2,63 +2,42 @@
 #define CLIENTBREAKOUT_GAMEWINDOW_H
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <sstream>
+#include <thread>
+#include <iostream>
+
 #include "../Socket/Client.h"
 #include "../Socket/TypeMessage.h"
-#include <thread>
 #include "../Socket/JsonManagement.h"
 
 using namespace std;
 
-
+/**
+ * @class Class for the game window GUI.
+ */
 class GameWindow {
 
 private: // Class' attributes
 
     int width = 1600;
     int height = 900;
-    string ip;
-    string port;
-    string playerName;
     int score;
     int lives;
     int ballDepth;
-    vector<string> matrix;
-    bool ballMoves = false;
-    float ballMovementX = 5;
-    float ballMovementY = -5;
     int barSizeX = 300;
     int combo = 0;
+    float ballMovementX = 5;
+    float ballMovementY = -5;
+    bool ballMoves = false;
+    string ip;
+    string port;
+    string playerName;
+    vector<string> matrix;
 
 public: // Class' functions
 
-    void updateMatrix() {
-        string response = Client::getInstance()->getResponse();
-        string updatedMatrix = JSON_Management::GetJSONString("Matrix", response);
-        this->matrix.clear();
-        stringstream ss(updatedMatrix);
-
-        while (ss.good()) {
-            string substr;
-            getline(ss, substr, ';');
-            matrix.push_back(substr);
-        }
-    }
-
     /**
-     *
-     */
-    void updateInterface(){
-        string response = Client::getInstance()->getResponse();
-        this->score = stoi(JSON_Management::GetJSONString("Score", response));
-        this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
-        this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
-        this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
-    }
-
-    /**
-     * @class Constructor of the GameWindow.
+     * @class GameWindow constructor.
      * @param ip
      * @param port
      * @param playerName
@@ -74,10 +53,36 @@ public: // Class' functions
         updateInterface();
     }
 
+    /**
+     * @brief Matrix update function.
+     */
+    void updateMatrix() {
+        string response = Client::getInstance()->getResponse();
+        string updatedMatrix = JSON_Management::GetJSONString("Matrix", response);
+        this->matrix.clear();
+        stringstream ss(updatedMatrix);
+
+        while (ss.good()) {
+            string substr;
+            getline(ss, substr, ';');
+            matrix.push_back(substr);
+        }
+    }
 
     /**
-     * @brief Function to start the GUI process.
-     * @return
+     * @brief GUI elements update function (Player score, lives, ball depth and bar size).
+     */
+    void updateInterface() {
+        string response = Client::getInstance()->getResponse();
+        this->score = stoi(JSON_Management::GetJSONString("Score", response));
+        this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
+        this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
+        this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
+    }
+
+    /**
+     * @brief GUI start function.
+     * @return 0.
      */
     int start() {
         // Window creation
@@ -269,9 +274,9 @@ public: // Class' functions
                        ball.getPosition().x <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
                 combo++;
-                if(combo%10 == 0){
-                    ballMovementX = ballMovementX*1.5;
-                    ballMovementY = ballMovementY*1.5;
+                if (combo % 10 == 0) {
+                    ballMovementX = ballMovementX * 1.5;
+                    ballMovementY = ballMovementY * 1.5;
                 }
             } else if ((ball.getPosition().x + ball.getRadius() * 2) >= 100 and ball.getPosition().x <= 1500 and
                        (ball.getPosition().y + ball.getRadius() * 2) >= 100 and
@@ -328,7 +333,7 @@ public: // Class' functions
                     }
                 }
             }
-            bar.setSize(sf::Vector2f(barSizeX,25));
+            bar.setSize(sf::Vector2f(barSizeX, 25));
 
             window.clear();
 
@@ -410,6 +415,7 @@ public: // Class' functions
             window.display();
         }
     }
+
 };
 
 #endif //CLIENTBREAKOUT_GAMEWINDOW_H

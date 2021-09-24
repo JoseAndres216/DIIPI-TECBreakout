@@ -2,21 +2,29 @@
 #define CLIENTBREAKOUT_MENUWINDOW_H
 
 #include <SFML/Graphics.hpp>
-#include "GameSettingsWindow.h"
 #include <iostream>
+
+#include "GameSettingsWindow.h"
 
 using namespace std;
 
-class MenuWindow{
+/**
+ * @class Class for the menu window GUI.
+ */
+class MenuWindow {
 
 private: // Class' attributes
+
     int width = 1600;
     int height = 900;
 
 public: //Class' fuctions
 
-    // Function to start the GUI process
-    int start(){
+    /**
+     * @brief GUI start function.
+     * @return 0.
+     */
+    int start() {
         //Creation of the window
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
@@ -69,15 +77,13 @@ public: //Class' fuctions
         playText.setOutlineThickness(5);
         playText.setPosition(400, 750);
 
-        while (window.isOpen())
-        {
+        while (window.isOpen()) {
             sf::Event event;
-            while (window.pollEvent(event))
-            {
+            while (window.pollEvent(event)) {
                 if (event.type == sf::Event::KeyReleased) {
                     if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
                         window.close();
-                    }else{ // Any key binding to start the game
+                    } else { // Any key binding to start the game
                         window.close();
                         GameSettingsWindow *window = new GameSettingsWindow();
                         window->start();
@@ -104,6 +110,7 @@ public: //Class' fuctions
             window.display();
         }
     }
+
 };
 
 #endif //CLIENTBREAKOUT_MENUWINDOW_H

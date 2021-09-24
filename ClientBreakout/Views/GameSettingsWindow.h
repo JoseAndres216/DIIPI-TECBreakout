@@ -2,19 +2,20 @@
 #define CLIENTBREAKOUT_GAMESETTINGSWINDOW_H
 
 #include <SFML/Graphics.hpp>
-#include "GameWindow.h"
-#include <iostream>
 #include <thread>
+#include <iostream>
+
+#include "GameWindow.h"
 
 using namespace std;
 
-void RunClient(string port, string ip) {
-    Client::getInstance()->InitClient(stoi(port), ip);
-}
-
+/**
+ * @class Class for the game settings window GUI.
+ */
 class GameSettingsWindow {
 
 private: // Class' attributes
+
     int width = 1600;
     int height = 900;
     string ip = "127.0.0.1";
@@ -23,7 +24,19 @@ private: // Class' attributes
 
 public: // Class' functions
 
-    // Function to start the GUI process
+    /**
+     * @brief Server connection function.
+     * @param port
+     * @param ip
+     */
+    static void RunClient(string port, string ip) {
+        Client::getInstance()->InitClient(stoi(port), ip);
+    }
+
+    /**
+     * @brief GUI start function.
+     * @return 0.
+     */
     int start() {
         //Creation of the window
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout Settings");
@@ -236,6 +249,7 @@ public: // Class' functions
             window.display();
         }
     }
+
 };
 
 #endif //CLIENTBREAKOUT_GAMESETTINGSWINDOW_H
