@@ -6,4 +6,6 @@
 ### Proyecto I - Crazy Breakout
 ### II Semestre, 2021
 
-Proyect Jira: https://joseandres216.atlassian.net/jira/software/projects/TB/boards/7
+***
+
+Click [here](https://joseandres216.atlassian.net/jira/software/projects/TB/boards/7) to open the Jira project.
