@@ -20,7 +20,7 @@ public:
      * @brief Class constructor, getters and setters,
      */
     Bar() {
-        size = 800;
+        size = 300;
     }
 
     const int getSize() const {

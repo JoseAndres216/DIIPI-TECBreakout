@@ -18,6 +18,8 @@ private:
 
     int depth;
 
+    string movementChange;
+
 public:
 
     /**
@@ -27,6 +29,7 @@ public:
         this->speedX = 5;
         this->speedY = -5;
         this->depth = 0;
+        this->movementChange = "";
     }
 
 
@@ -64,6 +67,14 @@ public:
 
     void resetDepth() {
         this->depth = 0;
+    }
+
+    const string &getMovementChange() const {
+        return movementChange;
+    }
+
+    void setMovementChange(const string &movementChange) {
+        Ball::movementChange = movementChange;
     }
 };
 

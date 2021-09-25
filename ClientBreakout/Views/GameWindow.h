@@ -78,6 +78,16 @@ public: // Class' functions
         this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
         this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
         this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
+        /*
+        if(JSON_Management::GetJSONString("ballMovement", response) != ""){
+            if(JSON_Management::GetJSONString("ballMovement", response) == "increase"){
+                ballMovementX = ballMovementX * 1.5;
+                ballMovementY = ballMovementY * 1.5;
+            }else{
+                ballMovementX = ballMovementX / 1.5;
+                ballMovementY = ballMovementY / 1.5;
+            }
+        }*/
     }
 
     /**
@@ -344,6 +354,7 @@ public: // Class' functions
             window.draw(playerNameText);
 
             // Drawing of the player score text
+            scoreText.setString("Score: " + to_string(this->score));
             window.draw(scoreText);
 
             // Drawing of the start game text
@@ -356,6 +367,7 @@ public: // Class' functions
             window.draw(livesText);
 
             // Drawing of the ball depth text
+            ballDepthText.setString("Ball depth: " + to_string(this->ballDepth));
             window.draw(ballDepthText);
 
             //Drawing of the blocks

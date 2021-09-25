@@ -112,14 +112,14 @@ void *SocketServer::clientController(void *obj) {
         }
         else if(collision == "TRUE"){
 
-            GameManager::getInstance()->getMatrix().deleteElement(stoi(x),stoi(y));
+            GameManager::getInstance()->collideBlock(stoi(x), stoi(y));
             auto collisionMessage = new TypeMessage();
             collisionMessage->setMatrix(GameManager::getInstance()->getMatrix().matrixToString());
             collisionMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
-            //collisionMessage->setBallMovement(to_string(GameManager::getInstance()->getBall().getSpeedX()));
             collisionMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
             collisionMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
             collisionMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
+            collisionMessage->setBallMovement(GameManager::getInstance()->getBall().getMovementChange());
             string json = JSON_Management::TypeMessageToJSON(collisionMessage);
             sendMessage(json.c_str());
         }

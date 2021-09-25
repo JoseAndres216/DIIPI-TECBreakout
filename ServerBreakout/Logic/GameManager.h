@@ -8,6 +8,8 @@
 #include "Ball.h"
 #include "../Socket/SocketServer.h"
 #include "../DataStructures/Node.h"
+#include <time.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -42,21 +44,21 @@ private:
                 for (int j = 1; j <= 14; j++) {
                     matrix.addElement(i, (j * 100), y, 3);
                 }
-                for(int j = 0; j < surpriseBlocksperRow; j++){
+                for (int j = 0; j < surpriseBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                    if(aux->getBlock()->getType() == 3){
+                    if (aux->getBlock()->getType() == 3) {
                         aux->getBlock()->setType(4);
                         aux->getBlock()->setResistance(1);
-                    }else{
+                    } else {
                         j--;
                     }
                 }
-                for(int j = 0; j < internBlocksperRow; j++){
+                for (int j = 0; j < internBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                    if(aux->getBlock()->getType() == 3){
+                    if (aux->getBlock()->getType() == 3) {
                         aux->getBlock()->setType(5);
                         aux->getBlock()->setResistance(1);
-                    }else{
+                    } else {
                         j--;
                     }
                 }
@@ -66,21 +68,21 @@ private:
                     matrix.addElement(i, (j * 100), y, 2);
                 }
 
-                for(int j = 0; j < surpriseBlocksperRow; j++){
+                for (int j = 0; j < surpriseBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                    if(aux->getBlock()->getType() == 2){
+                    if (aux->getBlock()->getType() == 2) {
                         aux->getBlock()->setType(4);
                         aux->getBlock()->setResistance(1);
-                    }else{
+                    } else {
                         j--;
                     }
                 }
-                for(int j = 0; j < internBlocksperRow; j++){
+                for (int j = 0; j < internBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                    if(aux->getBlock()->getType() == 2){
+                    if (aux->getBlock()->getType() == 2) {
                         aux->getBlock()->setType(5);
                         aux->getBlock()->setResistance(1);
-                    }else{
+                    } else {
                         j--;
                     }
                 }
@@ -91,22 +93,22 @@ private:
                 }
                 matrix.getTail()->getLinkedlist()->getHead()->getBlock()->setType(6);
                 matrix.getTail()->getLinkedlist()->getTail()->getBlock()->setType(6);
-                for(int j = 0; j < surpriseBlocksperRow; j++){
+                for (int j = 0; j < surpriseBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                    if(aux->getBlock()->getType() == 1){
+                    if (aux->getBlock()->getType() == 1) {
                         aux->getBlock()->setType(4);
                         aux->getBlock()->setResistance(1);
-                    }else{
+                    } else {
                         j--;
                     }
                 }
-                if(i == 5){
-                    for(int j = 0; j < internBlocksperRow; j++){
+                if (i == 5) {
+                    for (int j = 0; j < internBlocksperRow; j++) {
                         Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
-                        if(aux->getBlock()->getType() == 1){
+                        if (aux->getBlock()->getType() == 1) {
                             aux->getBlock()->setType(5);
                             aux->getBlock()->setResistance(1);
-                        }else{
+                        } else {
                             j--;
                         }
                     }
@@ -137,7 +139,7 @@ public:
     /**
      * @brief Function made for get access to the generateMatrix Function.
      */
-    void initializeComponents(){
+    void initializeComponents() {
         this->generateMatrix();
     }
 
@@ -163,6 +165,51 @@ public:
 
     void setBall(const Ball &ball) {
         this->ball = ball;
+    }
+
+    void collideBlock(int x, int y) {
+        if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 1) {
+            player.increaseScore(10);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
+                   (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 2) {
+            player.increaseScore(5);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
+                   (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 1) {
+            player.increaseScore(10);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
+                   (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 3) {
+            player.increaseScore(5);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
+                   (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 2) {
+            player.increaseScore(5);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
+                   (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 1) {
+            player.increaseScore(10);
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 4) {
+            srand(time(NULL));
+            int surprise = rand() % 2;
+
+            switch (surprise) {
+                case 0:
+                    bar.increaseSize();
+                    break;
+                case 1:
+                    bar.decreaseSize();
+                    break;
+                case 2:
+                    ball.setMovementChange("increase");
+                    break;
+                case 3:
+                    ball.setMovementChange("decrease");
+                    break;
+            }
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 5) {
+            // intern block
+        } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 6) {
+            ball.increaseDepth();
+        }
+
+        matrix.deleteElement(x, y);
     }
 
 };
