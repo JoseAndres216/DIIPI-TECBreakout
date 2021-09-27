@@ -79,6 +79,7 @@ void *SocketServer::clientController(void *obj) {
         string message;
         string firstTime;
         string collision;
+        string fall;
         string x;
         string y;
         char buffer[8192];
@@ -96,6 +97,7 @@ void *SocketServer::clientController(void *obj) {
         }
         firstTime = JSON_Management::GetJSONString("FirstTime", message);
         collision = JSON_Management::GetJSONString("Collision", message);
+        fall = JSON_Management::GetJSONString("Fall", message);
         x = JSON_Management::GetJSONString("X", message);
         y = JSON_Management::GetJSONString("Y", message);
         if(firstTime == "TRUE"){
@@ -121,6 +123,18 @@ void *SocketServer::clientController(void *obj) {
             collisionMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
             collisionMessage->setBallMovement(GameManager::getInstance()->getBall().getMovementChange());
             string json = JSON_Management::TypeMessageToJSON(collisionMessage);
+            sendMessage(json.c_str());
+        }
+        else if(fall == "TRUE"){
+
+            GameManager::getInstance()->ballFall();
+
+            auto fallMessage = new TypeMessage();
+            fallMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
+            fallMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
+            fallMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
+            fallMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
+            string json = JSON_Management::TypeMessageToJSON(fallMessage);
             sendMessage(json.c_str());
         }
         cout << message << endl;

@@ -16,6 +16,7 @@ private:
     string x;
     string y;
     string collision;
+    string fall;
 
 public:
 
@@ -33,6 +34,22 @@ public:
      */
     void setFirstTime(const string &firstTime) {
         TypeMessage::firstTime = firstTime;
+    }
+
+    /**
+     * @brief fall getter.
+     * @return The value of the fall key the string (response).
+     */
+    const string &getFall() const {
+        return fall;
+    }
+
+    /**
+     * @brief fall setter.
+     * @param fall
+     */
+    void setFall(const string &fall) {
+        TypeMessage::fall = fall;
     }
 
     /**

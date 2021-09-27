@@ -62,6 +62,9 @@ public:
         writer.Key("Collision");
         writer.String(message->getCollision().c_str());
 
+        writer.Key("Fall");
+        writer.String(message->getFall().c_str());
+
         writer.Key("X");
         writer.String(message->getX().c_str());
 

@@ -276,7 +276,21 @@ public: // Class' functions
             } else if (ball.getPosition().y < 0) {
                 ballMovementY = ballMovementY * -1;
             } else if (ball.getPosition().y > height) {
-                ballMovementY = ballMovementY * -1;
+                ball.setPosition(785, 750);
+                ballMovementX = 5;
+                ballMovementY = -5;
+                ballMoves = false;
+
+                auto fall = new TypeMessage();
+                fall->setFall("TRUE");
+                string json = JSON_Management::TypeMessageToJSON(fall);
+                Client::getInstance()->Send(json.c_str());
+
+                thread t([this]() {
+                    sf::sleep(sf::seconds(1));
+                    updateInterface();
+                });
+                t.detach();
 
                 // Collision with bar
             } else if ((ball.getPosition().y + ball.getRadius() * 2) == bar.getPosition().y and

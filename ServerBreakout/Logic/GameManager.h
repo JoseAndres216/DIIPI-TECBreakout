@@ -212,6 +212,10 @@ public:
         matrix.deleteElement(x, y);
     }
 
+    void ballFall(){
+        player.decreaseLives();
+    }
+
 };
 
 GameManager *GameManager::instance = 0;
