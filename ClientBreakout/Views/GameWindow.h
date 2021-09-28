@@ -26,8 +26,8 @@ private: // Class' attributes
     int ballDepth;
     int barSizeX = 300;
     int combo = 0;
-    float ballMovementX = 3;
-    float ballMovementY = -5;
+    float ballMovementX = 1;
+    float ballMovementY = -1;
     bool ballMoves = false;
     string ip;
     string port;
@@ -99,7 +99,7 @@ public: // Class' functions
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
         //Window FPS
-        window.setFramerateLimit(45);
+        window.setFramerateLimit(144);
 
         // Mouse hiding
         window.setMouseCursorVisible(false);
@@ -270,13 +270,13 @@ public: // Class' functions
             if (ballMoves) {
                 ball.move(ballMovementX, ballMovementY);
             }
-            if (ball.getPosition().x < 0) {
+            if ((ball.getPosition().x + ball.getRadius()) <= 0) {
                 ballMovementX = ballMovementX * -1;
-            } else if (ball.getPosition().x > (width - ball.getRadius())) {
+            } else if ((ball.getPosition().x + ball.getRadius()) >= width) {
                 ballMovementX = ballMovementX * -1;
-            } else if (ball.getPosition().y < 0) {
+            } else if ((ball.getPosition().y + ball.getRadius()) < 0) {
                 ballMovementY = ballMovementY * -1;
-            } else if (ball.getPosition().y > height) {
+            } else if ((ball.getPosition().y + ball.getRadius()) > height) {
                 ball.setPosition(785, 750);
                 ballMovementX = 3;
                 ballMovementY = -5;
@@ -313,17 +313,16 @@ public: // Class' functions
                 }
 
                 // Collision with bar
-            } else if ((ball.getPosition().y + ball.getRadius() * 2) == bar.getPosition().y and
-                       ball.getPosition().x >= bar.getPosition().x and
-                       (ball.getPosition().x + ball.getRadius() * 2) <= (bar.getPosition().x + bar.getSize().x)) {
+            } else if ((ball.getPosition().y + ball.getRadius()) == bar.getPosition().y and
+                       (ball.getPosition().x + ball.getRadius()) >= bar.getPosition().x and
+                       (ball.getPosition().x + ball.getRadius()) <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
                 combo++;
                 if (combo % 10 == 0) {
-                    ballMovementX = ballMovementX * 1.5;
-                    ballMovementY = ballMovementY * 1.5;
+                    //window.setFramerateLimit()
                 }
-            } else if ((ball.getPosition().y + ball.getRadius() * 2) >= 100 and
-                       ball.getPosition().y <= 400) {
+            } else if ((ball.getPosition().y + ball.getRadius()) >= 100 and
+                       (ball.getPosition().y + ball.getRadius()) <= 400) {
                 for (int i = 0; i < matrix.size(); i++) {
                     string blockInfo = matrix[i];
                     vector<string> block;
@@ -340,19 +339,19 @@ public: // Class' functions
                     int blockY = stoi(block[1]);
                     int blockR = stoi(block[3]);
 
-                    if ((ball.getPosition().x + ball.getRadius() * 2) >= blockX and
-                        ball.getPosition().x <= (blockX + 100) and
-                        (ball.getPosition().y + ball.getRadius() * 2) >= blockY and
-                        ball.getPosition().y <= (blockY + 50) and blockR != 0) {
+                    if ((ball.getPosition().x + ball.getRadius()) >= blockX and
+                        (ball.getPosition().x + ball.getRadius()) <= (blockX + 100) and
+                        (ball.getPosition().y + ball.getRadius()) >= blockY and
+                        (ball.getPosition().y + ball.getRadius()) <= (blockY + 50) and blockR != 0) {
                         cout << "Collide on block on x: " << blockX << " and y: " << blockY << endl;
                         cout << "Ball position x: " << ball.getPosition().x << " and y: " << ball.getPosition().y
                              << endl;
 
-                        if ((ball.getPosition().x + ball.getRadius() * 2) == blockX or
-                            ball.getPosition().x == (blockX + 100)) {
+                        if ((ball.getPosition().x + ball.getRadius()) == blockX or
+                            (ball.getPosition().x + ball.getRadius()) == (blockX + 100)) {
                             ballMovementX = ballMovementX * -1;
-                        } else if ((ball.getPosition().y + ball.getRadius() * 2) == blockY or
-                                   ball.getPosition().y == (blockY + 50)) {
+                        } else if ((ball.getPosition().y + ball.getRadius()) == blockY or
+                                   (ball.getPosition().y + ball.getRadius()) == (blockY + 50)) {
                             ballMovementY = ballMovementY * -1;
                         } else {
                             ballMovementX = ballMovementX * -1;
