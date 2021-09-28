@@ -41,7 +41,7 @@ private:
         for (int i = 1; i <= 6; i++) {
             matrix.addRow();
             if (i == 1 or i == 2) {
-                for (int j = 1; j <= 14; j++) {
+                for (int j = 0; j <= 15; j++) {
                     matrix.addElement(i, (j * 100), y, 3);
                 }
                 for (int j = 0; j < surpriseBlocksperRow; j++) {
@@ -64,7 +64,7 @@ private:
                 }
                 y += 50;
             } else if (i == 3 or i == 4) {
-                for (int j = 1; j <= 14; j++) {
+                for (int j = 0; j <= 15; j++) {
                     matrix.addElement(i, (j * 100), y, 2);
                 }
 
@@ -88,7 +88,7 @@ private:
                 }
                 y += 50;
             } else {
-                for (int j = 1; j <= 14; j++) {
+                for (int j = 0; j <= 15; j++) {
                     matrix.addElement(i, (j * 100), y, 1);
                 }
                 matrix.getTail()->getLinkedlist()->getHead()->getBlock()->setType(6);
@@ -209,11 +209,17 @@ public:
             ball.increaseDepth();
         }
 
+        if((this->player.getScore()%100) == 0){
+            bar.increaseSize();
+        }
+
         matrix.deleteElement(x, y);
     }
 
     void ballFall(){
         player.decreaseLives();
+        bar.resetSize();
+        ball.resetDepth();
     }
 
 };

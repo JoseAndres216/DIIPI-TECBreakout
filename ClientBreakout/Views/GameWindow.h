@@ -26,7 +26,7 @@ private: // Class' attributes
     int ballDepth;
     int barSizeX = 300;
     int combo = 0;
-    float ballMovementX = 5;
+    float ballMovementX = 3;
     float ballMovementY = -5;
     bool ballMoves = false;
     string ip;
@@ -99,7 +99,7 @@ public: // Class' functions
         sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
         //Window FPS
-        window.setFramerateLimit(60);
+        window.setFramerateLimit(45);
 
         // Mouse hiding
         window.setMouseCursorVisible(false);
@@ -266,6 +266,7 @@ public: // Class' functions
                     }
                 }
             }
+
             if (ballMoves) {
                 ball.move(ballMovementX, ballMovementY);
             }
@@ -277,33 +278,51 @@ public: // Class' functions
                 ballMovementY = ballMovementY * -1;
             } else if (ball.getPosition().y > height) {
                 ball.setPosition(785, 750);
-                ballMovementX = 5;
+                ballMovementX = 3;
                 ballMovementY = -5;
                 ballMoves = false;
+                bar.setPosition(650, 800);
 
                 auto fall = new TypeMessage();
                 fall->setFall("TRUE");
                 string json = JSON_Management::TypeMessageToJSON(fall);
                 Client::getInstance()->Send(json.c_str());
 
-                thread t([this]() {
-                    sf::sleep(sf::seconds(1));
-                    updateInterface();
-                });
-                t.detach();
+                sf::sleep(sf::seconds(1));
+                updateInterface();
+
+                if (this->lives == 0) {
+                    window.clear();
+                    window.draw(gameBackgroundSprite);
+                    startGameText.setString("Game Over");
+                    startGameText.setFillColor(sf::Color::Red);
+                    startGameText.setPosition(280, 300);
+                    startGameText.setCharacterSize(120);
+
+                    scoreText.setPosition(590, 500);
+                    scoreText.setCharacterSize(50);
+
+                    window.draw(startGameText);
+                    window.draw(scoreText);
+                    window.display();
+                    sf::sleep(sf::seconds(5));
+                    window.close();
+                    break;
+                } else {
+                    startGameText.setString("Click once to start!");
+                }
 
                 // Collision with bar
             } else if ((ball.getPosition().y + ball.getRadius() * 2) == bar.getPosition().y and
                        ball.getPosition().x >= bar.getPosition().x and
-                       ball.getPosition().x <= (bar.getPosition().x + bar.getSize().x)) {
+                       (ball.getPosition().x + ball.getRadius() * 2) <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
                 combo++;
                 if (combo % 10 == 0) {
                     ballMovementX = ballMovementX * 1.5;
                     ballMovementY = ballMovementY * 1.5;
                 }
-            } else if ((ball.getPosition().x + ball.getRadius() * 2) >= 100 and ball.getPosition().x <= 1500 and
-                       (ball.getPosition().y + ball.getRadius() * 2) >= 100 and
+            } else if ((ball.getPosition().y + ball.getRadius() * 2) >= 100 and
                        ball.getPosition().y <= 400) {
                 for (int i = 0; i < matrix.size(); i++) {
                     string blockInfo = matrix[i];
@@ -329,7 +348,6 @@ public: // Class' functions
                         cout << "Ball position x: " << ball.getPosition().x << " and y: " << ball.getPosition().y
                              << endl;
 
-
                         if ((ball.getPosition().x + ball.getRadius() * 2) == blockX or
                             ball.getPosition().x == (blockX + 100)) {
                             ballMovementX = ballMovementX * -1;
@@ -354,9 +372,28 @@ public: // Class' functions
                             updateInterface();
                         });
                         t.detach();
+
+                        if (matrix.empty()) {
+                            window.clear();
+                            window.draw(gameBackgroundSprite);
+                            startGameText.setString("You Won!");
+                            startGameText.setFillColor(sf::Color::Red);
+                            startGameText.setPosition(300, 300);
+                            startGameText.setCharacterSize(120);
+
+                            scoreText.setPosition(590, 500);
+                            scoreText.setCharacterSize(50);
+
+                            window.draw(startGameText);
+                            window.draw(scoreText);
+                            window.display();
+                            sf::sleep(sf::seconds(5));
+                            window.close();
+                        }
                     }
                 }
             }
+
             bar.setSize(sf::Vector2f(barSizeX, 25));
 
             window.clear();
@@ -378,6 +415,7 @@ public: // Class' functions
             window.draw(ipPortText);
 
             // Drawing of the player lives text
+            livesText.setString("Lives: " + to_string(this->lives));
             window.draw(livesText);
 
             // Drawing of the ball depth text

@@ -205,7 +205,7 @@ public: // Class' functions
                             window.draw(playText);
 
                             window.display();
-                            sf::sleep(sf::seconds(20));
+                            sf::sleep(sf::seconds(15));
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();
