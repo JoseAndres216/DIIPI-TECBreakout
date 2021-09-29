@@ -24,10 +24,11 @@ private: // Class' attributes
     int score;
     int lives;
     int ballDepth;
+    int ballSpeed = 1;
     int barSizeX = 300;
     int combo = 0;
-    float ballMovementX = 1;
-    float ballMovementY = -1;
+    float ballMovementX = ballSpeed;
+    float ballMovementY = -ballSpeed;
     bool ballMoves = false;
     string ip;
     string port;
@@ -78,16 +79,66 @@ public: // Class' functions
         this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
         this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
         this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
-        /*
-        if(JSON_Management::GetJSONString("ballMovement", response) != ""){
-            if(JSON_Management::GetJSONString("ballMovement", response) == "increase"){
-                ballMovementX = ballMovementX * 1.5;
-                ballMovementY = ballMovementY * 1.5;
-            }else{
-                ballMovementX = ballMovementX / 1.5;
-                ballMovementY = ballMovementY / 1.5;
+
+        if (JSON_Management::GetJSONString("BallMovement", response) == "increase") {
+            if (ballSpeed == 1) {
+                ballSpeed = 2;
+                combo = 5;
+            } else if (ballSpeed == 2) {
+                ballSpeed = 5;
+                combo = 25;
+            } else if (ballSpeed == 5) {
+                ballSpeed = 10;
+                combo = 50;
+            } else if (ballSpeed == 10) {
+                ballSpeed = 25;
+                combo = 100;
             }
-        }*/
+
+            if (ballMovementX > 0 and ballMovementY > 0) {
+                ballMovementX = ballSpeed;
+                ballMovementY = ballSpeed;
+            } else if (ballMovementX > 0 and ballMovementY < 0) {
+                ballMovementX = ballSpeed;
+                ballMovementY = -ballSpeed;
+            } else if (ballMovementX < 0 and ballMovementY > 0) {
+                ballMovementX = -ballSpeed;
+                ballMovementY = ballSpeed;
+            } else {
+                ballMovementX = -ballSpeed;
+                ballMovementY = -ballSpeed;
+            }
+
+        } else if (JSON_Management::GetJSONString("BallMovement", response) == "decrease") {
+            if (ballSpeed == 25) {
+                ballSpeed = 10;
+                combo = 50;
+            } else if (ballSpeed == 10) {
+                ballSpeed = 5;
+                combo = 25;
+            } else if (ballSpeed == 5) {
+                ballSpeed = 2;
+                combo = 5;
+            } else if (ballSpeed == 2) {
+                ballSpeed = 1;
+                combo = 0;
+            }
+
+            if (ballMovementX > 0 and ballMovementY > 0) {
+                ballMovementX = ballSpeed;
+                ballMovementY = ballSpeed;
+            } else if (ballMovementX > 0 and ballMovementY < 0) {
+                ballMovementX = ballSpeed;
+                ballMovementY = -ballSpeed;
+            } else if (ballMovementX < 0 and ballMovementY > 0) {
+                ballMovementX = -ballSpeed;
+                ballMovementY = ballSpeed;
+            } else {
+                ballMovementX = -ballSpeed;
+                ballMovementY = -ballSpeed;
+            }
+        }
+
     }
 
     /**
@@ -242,17 +293,36 @@ public: // Class' functions
         // Creation of the ball
         sf::CircleShape ball(15);
         ball.setFillColor(sf::Color::White);
-        ball.setPosition(785, 750);
+        ball.setPosition(800, 750);
 
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
-                if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game
+                if (event.type == sf::Event::MouseButtonReleased) { // Mouse binding to start game.
                     ballMoves = true;
                     startGameText.setString("");
                 }
-                if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program
+                if (event.key.code == sf::Keyboard::Escape) { //Escape binding to close program.
+                    window.clear();
+                    window.draw(gameBackgroundSprite);
+                    startGameText.setString("Game Over");
+                    startGameText.setFillColor(sf::Color::Red);
+                    startGameText.setPosition(280, 300);
+                    startGameText.setCharacterSize(120);
+
+                    scoreText.setPosition(590, 500);
+                    scoreText.setCharacterSize(50);
+
+                    window.draw(startGameText);
+                    window.draw(scoreText);
+                    window.display();
+                    sf::sleep(sf::seconds(5));
                     window.close();
+                    break;
+                }
+                if (event.key.code == sf::Keyboard::P) { //P binding to pause the program.
+                    ballMoves = false;
+                    startGameText.setString("Click once to start!");
                 }
                 if (event.type == sf::Event::Closed)
                     window.close();
@@ -277,9 +347,13 @@ public: // Class' functions
             } else if ((ball.getPosition().y + ball.getRadius()) < 0) {
                 ballMovementY = ballMovementY * -1;
             } else if ((ball.getPosition().y + ball.getRadius()) > height) {
-                ball.setPosition(785, 750);
-                ballMovementX = 3;
-                ballMovementY = -5;
+                sf::sleep(sf::seconds(2));
+
+                ball.setPosition(800, 750);
+                ballSpeed = 1;
+                ballMovementX = ballSpeed;
+                ballMovementY = -ballSpeed;
+                combo = 0;
                 ballMoves = false;
                 bar.setPosition(650, 800);
 
@@ -318,8 +392,22 @@ public: // Class' functions
                        (ball.getPosition().x + ball.getRadius()) <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
                 combo++;
-                if (combo % 10 == 0) {
-                    //window.setFramerateLimit()
+                if (combo == 5) {
+                    ballSpeed = 2;
+                } else if (combo == 25) {
+                    ballSpeed = 5;
+                } else if (combo == 50) {
+                    ballSpeed = 10;
+                } else if (combo == 100) {
+                    ballSpeed = 25;
+                }
+
+                if (ballMovementX > 0) {
+                    ballMovementX = ballSpeed;
+                    ballMovementY = -ballSpeed;
+                } else {
+                    ballMovementX = -ballSpeed;
+                    ballMovementY = -ballSpeed;
                 }
             } else if ((ball.getPosition().y + ball.getRadius()) >= 100 and
                        (ball.getPosition().y + ball.getRadius()) <= 400) {
@@ -372,7 +460,7 @@ public: // Class' functions
                         });
                         t.detach();
 
-                        if (matrix.empty()) {
+                        if (matrix.size() == 4) {
                             window.clear();
                             window.draw(gameBackgroundSprite);
                             startGameText.setString("You Won!");
@@ -392,8 +480,6 @@ public: // Class' functions
                     }
                 }
             }
-
-            bar.setSize(sf::Vector2f(barSizeX, 25));
 
             window.clear();
 
@@ -470,7 +556,10 @@ public: // Class' functions
                 }
             }
 
-            window.draw(bar);
+            bar.setSize(sf::Vector2f(barSizeX, 25));
+            if(bar.getSize().x > 0){
+                window.draw(bar);
+            }
 
             // Drawing of the ball
             window.draw(ball);

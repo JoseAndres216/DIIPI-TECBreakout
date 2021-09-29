@@ -124,6 +124,8 @@ void *SocketServer::clientController(void *obj) {
             collisionMessage->setBallMovement(GameManager::getInstance()->getBall().getMovementChange());
             string json = JSON_Management::TypeMessageToJSON(collisionMessage);
             sendMessage(json.c_str());
+
+            GameManager::getInstance()->resetBallMovement();
         }
         else if(fall == "TRUE"){
 

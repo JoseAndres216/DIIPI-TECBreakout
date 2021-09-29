@@ -82,7 +82,9 @@ public:
      * @brief Function that decrease the resistance of the Block.
      */
     void decreaseResistance() {
-        this->resistance--;
+        if(resistance > 0){
+            this->resistance--;
+        }
     }
 };
 

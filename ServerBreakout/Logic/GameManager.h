@@ -168,21 +168,28 @@ public:
     }
 
     void collideBlock(int x, int y) {
+        bool depth = false;
 
-        if(ball.getDepth()>0){
-            if(ball.getDepth() == 1){
-                if(y != 50){
-                    y = y -50;
+        if (ball.getDepth() > 0) {
+            if (ball.getDepth() == 1) {
+                if (y != 50) {
+                    y = y - 50;
+                    depth = true;
                 }
-            } else if(ball.getDepth() == 2){
-                if(y != 50 and y != 100){
-                    y = y -100;
+            } else if (ball.getDepth() == 2) {
+                if (y != 50 and y != 100) {
+                    y = y - 100;
+                    depth = true;
                 }
-            }else{
-                y = y -100;
+                if (y == 100) {
+                    y = y - 50;
+                    depth = true;
+                }
             }
         }
+
         ball.setDepth(0);
+
         if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 1) {
             player.increaseScore(10);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
@@ -202,7 +209,7 @@ public:
             player.increaseScore(10);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 4) {
             srand(time(NULL));
-            int surprise = rand() % 2;
+            int surprise = rand() % 4;
 
             switch (surprise) {
                 case 0:
@@ -219,22 +226,30 @@ public:
                     break;
             }
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 5) {
-            // intern block
+            if (depth) {
+                player.increaseScore(30);
+            } else {
+                player.increaseScore(10);
+            }
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 6) {
             ball.increaseDepth();
         }
 
-        if((this->player.getScore()%100) == 0){
+        if ((this->player.getScore() % 100) == 0) {
             bar.increaseSize();
         }
 
         matrix.deleteElement(x, y);
     }
 
-    void ballFall(){
+    void ballFall() {
         player.decreaseLives();
-        bar.resetSize();
+        bar.decreaseSize();
         ball.resetDepth();
+    }
+
+    void resetBallMovement() {
+        ball.setMovementChange("");
     }
 
 };

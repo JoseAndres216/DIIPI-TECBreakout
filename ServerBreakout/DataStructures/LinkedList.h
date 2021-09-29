@@ -125,8 +125,8 @@ public:
     void deleteElement(int posX, int posY) {
         if (isElement(posX, posY)) {
             Node *element = getElement(posX, posY);
-            if(element->getBlock()->getResistance() > 0 and element->getBlock()->getType() != 6){
-                element->getBlock()->setResistance(element->getBlock()->getResistance()-1);
+            if(element->getBlock()->getType() != 6){
+                element->getBlock()->decreaseResistance();
             }
         } else {
             cerr << "Couldn't find the element.";

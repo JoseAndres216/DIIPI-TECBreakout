@@ -58,7 +58,9 @@ public:
     }
 
     void increaseDepth() {
-        this->depth++;
+        if(depth < 2){
+            this->depth++;
+        }
     }
 
     void decreaseDepth() {
