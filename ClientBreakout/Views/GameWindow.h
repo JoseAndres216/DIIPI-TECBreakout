@@ -324,8 +324,100 @@ public: // Class' functions
                     ballMoves = false;
                     startGameText.setString("Click once to start!");
                 }
-                if (event.type == sf::Event::Closed)
+                if (event.key.code == sf::Keyboard::Q) { //A binding for left bar rotation.
+                    thread leftRotation([&bar, this]() {
+                        bar.setOrigin(sf::Vector2f((this->barSizeX / 2), 25 / 2));
+                        for (int i = 0; i < 8; i++) {
+                            bar.rotate(-45);
+                            sf::sleep(sf::milliseconds(100));
+                        }
+                        bar.setRotation(0);
+                        bar.setOrigin(sf::Vector2f(0.f, 0.f));
+                    });
+
+                    leftRotation.detach();
+
+                    if ((ball.getPosition().x + ball.getRadius()) >= bar.getPosition().x and
+                        (ball.getPosition().x + ball.getRadius()) <= (bar.getPosition().x + bar.getSize().x) and
+                        (ball.getPosition().y + ball.getRadius()) <= 800 and
+                        (ball.getPosition().y + ball.getRadius()) >= (800 - bar.getSize().x / 2)) {
+                        /*
+                        if (ballSpeed == 1) {
+                            ballSpeed = 2;
+                            combo = 5;
+                        } else if (ballSpeed == 2) {
+                            ballSpeed = 5;
+                            combo = 25;
+                        } else if (ballSpeed == 5) {
+                            ballSpeed = 10;
+                            combo = 50;
+                        } else if (ballSpeed == 10) {
+                            ballSpeed = 25;
+                            combo = 100;
+                        }*/
+
+                        ballMovementX = -ballSpeed;
+                        ballMovementY = -ballSpeed;
+
+                        combo++;
+                    }
+                }
+                if (event.key.code == sf::Keyboard::E) { //D binding for right bar rotation.
+                    thread rightRotation([&bar, this]() {
+                        bar.setOrigin(sf::Vector2f((this->barSizeX / 2), 25 / 2));
+                        for (int i = 0; i < 8; i++) {
+                            bar.rotate(45);
+                            sf::sleep(sf::milliseconds(100));
+                        }
+                        bar.setRotation(0);
+                        bar.setOrigin(sf::Vector2f(0.f, 0.f));
+                    });
+
+                    rightRotation.detach();
+
+                    if ((ball.getPosition().x + ball.getRadius()) >= bar.getPosition().x and
+                        (ball.getPosition().x + ball.getRadius()) <= (bar.getPosition().x + bar.getSize().x) and
+                        (ball.getPosition().y + ball.getRadius()) <= 800 and
+                        (ball.getPosition().y + ball.getRadius()) >= (800 - bar.getSize().x / 2)) {
+                        /*
+                        if (ballSpeed == 1) {
+                            ballSpeed = 2;
+                            combo = 5;
+                        } else if (ballSpeed == 2) {
+                            ballSpeed = 5;
+                            combo = 25;
+                        } else if (ballSpeed == 5) {
+                            ballSpeed = 10;
+                            combo = 50;
+                        } else if (ballSpeed == 10) {
+                            ballSpeed = 25;
+                            combo = 100;
+                        }*/
+
+                        ballMovementX = ballSpeed;
+                        ballMovementY = -ballSpeed;
+
+                        combo++;
+                    }
+                }
+                if (event.type == sf::Event::Closed) {
+                    window.clear();
+                    window.draw(gameBackgroundSprite);
+                    startGameText.setString("Game Over");
+                    startGameText.setFillColor(sf::Color::Red);
+                    startGameText.setPosition(280, 300);
+                    startGameText.setCharacterSize(120);
+
+                    scoreText.setPosition(590, 500);
+                    scoreText.setCharacterSize(50);
+
+                    window.draw(startGameText);
+                    window.draw(scoreText);
+                    window.display();
+                    sf::sleep(sf::seconds(5));
                     window.close();
+                    break;
+                }
                 if (event.type == sf::Event::MouseMoved) {
                     bar.setPosition((sf::Mouse::getPosition(window).x) - bar.getSize().x / 2, 800);
                     if (bar.getPosition().x < 0) {
@@ -557,7 +649,7 @@ public: // Class' functions
             }
 
             bar.setSize(sf::Vector2f(barSizeX, 25));
-            if(bar.getSize().x > 0){
+            if (bar.getSize().x > 0) {
                 window.draw(bar);
             }
 

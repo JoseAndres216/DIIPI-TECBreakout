@@ -235,11 +235,16 @@ public:
             ball.increaseDepth();
         }
 
-        if ((this->player.getScore() % 100) == 0) {
+        if ((this->player.getScore() % 100) == 0 or (this->player.getScore() % 100) == 5) {
             bar.increaseSize();
         }
 
-        matrix.deleteElement(x, y);
+        if ((this->player.getScore() >= 500 and this->player.getScore() < 505) or
+            (this->player.getScore() >= 1000 and this->player.getScore() < 1005)){
+            this->player.increaseLives();
+        }
+
+            matrix.deleteElement(x, y);
     }
 
     void ballFall() {
