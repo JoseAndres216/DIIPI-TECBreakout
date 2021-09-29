@@ -168,6 +168,21 @@ public:
     }
 
     void collideBlock(int x, int y) {
+
+        if(ball.getDepth()>0){
+            if(ball.getDepth() == 1){
+                if(y != 50){
+                    y = y -50;
+                }
+            } else if(ball.getDepth() == 2){
+                if(y != 50 and y != 100){
+                    y = y -100;
+                }
+            }else{
+                y = y -100;
+            }
+        }
+        ball.setDepth(0);
         if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 1) {
             player.increaseScore(10);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
