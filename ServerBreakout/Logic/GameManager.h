@@ -188,25 +188,29 @@ public:
             }
         }
 
-        ball.setDepth(0);
-
         if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 1) {
             player.increaseScore(10);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
                    (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 2) {
             player.increaseScore(5);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 2 and
                    (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 1) {
             player.increaseScore(10);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
                    (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 3) {
             player.increaseScore(5);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
                    (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 2) {
             player.increaseScore(5);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 3 and
                    (matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getResistance()) == 1) {
             player.increaseScore(10);
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 4) {
             srand(time(NULL));
             int surprise = rand() % 4;
@@ -225,12 +229,15 @@ public:
                     ball.setMovementChange("decrease");
                     break;
             }
+
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 5) {
             if (depth) {
                 player.increaseScore(30);
             } else {
                 player.increaseScore(10);
             }
+            ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 6) {
             ball.increaseDepth();
         }
@@ -244,7 +251,7 @@ public:
             this->player.increaseLives();
         }
 
-            matrix.deleteElement(x, y);
+        matrix.deleteElement(x, y);
     }
 
     void ballFall() {

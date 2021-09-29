@@ -20,7 +20,7 @@ public:
      * @brief Class constructor, getters and setters,
      */
     Bar() {
-        size = 300;
+        size = 200;
     }
 
     const int getSize() const {
@@ -35,7 +35,9 @@ public:
      * @brief Function to increase the lives.
      */
     void increaseSize() {
-        this->size += 50;
+        if(this->size < 400){
+            this->size += 50;
+        }
     }
 
     /**
@@ -43,7 +45,9 @@ public:
      * @
      */
     void decreaseSize() {
-        this->size -= 50;
+        if(this->size > 0){
+            this->size -= 50;
+        }
     }
 
     /**
