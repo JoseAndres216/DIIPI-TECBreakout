@@ -526,7 +526,7 @@ public: // Class' functions
                 sf::sleep(sf::seconds(1));
                 updateInterface();
 
-                if (this->lives == 0) {
+                if (this->lives == 0 or this->barSizeX <= 0) {
                     window.clear();
                     window.draw(gameBackgroundSprite);
                     startGameText.setString("Game Over");
@@ -620,6 +620,24 @@ public: // Class' functions
                             updateInterface();
                         });
                         t.detach();
+
+                        if (this->barSizeX <= 0) {
+                            window.clear();
+                            window.draw(gameBackgroundSprite);
+                            startGameText.setString("Game Over");
+                            startGameText.setFillColor(sf::Color::Red);
+                            startGameText.setPosition(280, 300);
+                            startGameText.setCharacterSize(120);
+
+                            scoreText.setPosition(500, 500);
+                            scoreText.setCharacterSize(50);
+
+                            window.draw(startGameText);
+                            window.draw(scoreText);
+                            window.display();
+                            sf::sleep(sf::seconds(5));
+                            window.close();
+                            break;
                     }
                 }
             }

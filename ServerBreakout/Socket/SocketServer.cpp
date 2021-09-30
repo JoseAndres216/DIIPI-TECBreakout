@@ -135,6 +135,7 @@ void *SocketServer::clientController(void *obj) {
             auto fallMessage = new TypeMessage();
             fallMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
             fallMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
+            fallMessage->setSurprise(GameManager::getInstance()->getSurprise());
             fallMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
             fallMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
             string json = JSON_Management::TypeMessageToJSON(fallMessage);

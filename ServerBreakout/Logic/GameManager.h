@@ -303,14 +303,7 @@ public:
 
     void ballFall() {
         player.decreaseLives();
-        if(bar.getSize() > 0){
-            bar.decreaseSize();
-            if(bar.getSize() == 0){
-                bar.resetSize();
-            }
-        }else{
-            bar.resetSize();
-        }
+        bar.decreaseSize();
         ball.resetDepth();
     }
 
