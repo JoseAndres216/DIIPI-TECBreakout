@@ -19,7 +19,7 @@ private: // Class' attributes
     int width = 1600;
     int height = 900;
     string ip = "127.0.0.1";
-    string port = "9090";
+    string port = "8080";
     string playerName = "PLAYER 1";
 
 public: // Class' functions
@@ -39,7 +39,7 @@ public: // Class' functions
      */
     int start() {
         //Creation of the window
-        sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout Settings");
+        sf::RenderWindow window(sf::VideoMode(width, height), "Crazy Breakout");
 
         //Load of the background image
         sf::Texture menuBackground;
@@ -205,7 +205,7 @@ public: // Class' functions
                             window.draw(playText);
 
                             window.display();
-                            sf::sleep(sf::seconds(18));
+                            sf::sleep(sf::seconds(35));
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();

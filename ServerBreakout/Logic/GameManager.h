@@ -36,8 +36,8 @@ private:
      * @brief Generates matrix based on given quantities.
      */
     void generateMatrix() {
-        int internBlocksperRow = 1;
-        int surpriseBlocksperRow = 2;
+        int internBlocksperRow = 2;
+        int surpriseBlocksperRow = 3;
         int y = 100;
         for (int i = 1; i <= 6; i++) {
             matrix.addRow();
@@ -181,16 +181,16 @@ public:
 
         if (ball.getDepth() > 0) {
             if (ball.getDepth() == 1) {
-                if (y != 50) {
+                if (y > 100) {
                     y = y - 50;
                     depth = true;
                 }
             } else if (ball.getDepth() == 2) {
-                if (y != 50 and y != 100) {
+                if (y > 150) {
                     y = y - 100;
                     depth = true;
                 }
-                if (y == 100) {
+                if (y == 150) {
                     y = y - 50;
                     depth = true;
                 }
@@ -227,35 +227,51 @@ public:
             switch (surprise) {
                 case 0:
                     bar.increaseSize();
-                    this->surprise = "Bar Size (+)";
+                    this->surprise = "Bar Size+";
                     break;
                 case 1:
                     bar.decreaseSize();
-                    this->surprise = "Increase Size";
+                    this->surprise = "Bar Size-";
                     break;
                 case 2:
                     ball.setMovementChange("increase");
-                    this->surprise = "Increase Speed";
+                    this->surprise = "Ball Speed+";
                     break;
                 case 3:
                     ball.setMovementChange("decrease");
-                    this->surprise = "Decrease Speed";
+                    this->surprise = "Ball Speed-";
                     break;
                 case 4:
                     player.increaseLives();
-                    this->surprise = "Lives (+1)";
+                    this->surprise = "Lives+";
                     break;
                 case 5:
-                    player.decreaseLives();
-                    this->surprise = "Lives (-1)";
+                    if (this->player.getLives() >= 2) {
+                        player.decreaseLives();
+                        this->surprise = "Lives-";
+                    } else {
+                        this->surprise = "Close One-";
+                    }
                     break;
                 case 6:
+                    if ((player.getScore() > 305 and player.getScore() < 500) or
+                        (player.getScore() > 805 and player.getScore() < 1000)) {
+                        this->player.increaseLives();
+                    }
                     player.increaseScore(200);
-                    this->surprise = "Score (+200)";
+                    this->surprise = "200 Score+";
                     break;
                 case 7:
-                    player.decreaseScore(200);
-                    this->surprise = "Score (-200)";
+                    if (this->player.getScore() >= 200) {
+                        player.decreaseScore(200);
+                        if ((player.getScore() > 505 and player.getScore() < 700) or
+                            (player.getScore() > 1005 and player.getScore() < 1200)) {
+                            this->player.decreaseLives();
+                        }
+                        this->surprise = "200 Score-";
+                    } else {
+                        this->surprise = "Close One-";
+                    }
                     break;
             }
 
@@ -273,11 +289,13 @@ public:
 
         if ((this->player.getScore() % 100) == 0 or (this->player.getScore() % 100) == 5) {
             bar.increaseSize();
+            this->player.increaseScore(10);
         }
 
         if ((this->player.getScore() >= 500 and this->player.getScore() < 505) or
-            (this->player.getScore() >= 1000 and this->player.getScore() < 1005)){
+            (this->player.getScore() >= 1000 and this->player.getScore() < 1005)) {
             this->player.increaseLives();
+            this->player.increaseScore(10);
         }
 
         matrix.deleteElement(x, y);
@@ -285,7 +303,14 @@ public:
 
     void ballFall() {
         player.decreaseLives();
-        bar.decreaseSize();
+        if(bar.getSize() > 0){
+            bar.decreaseSize();
+            if(bar.getSize() == 0){
+                bar.resetSize();
+            }
+        }else{
+            bar.resetSize();
+        }
         ball.resetDepth();
     }
 

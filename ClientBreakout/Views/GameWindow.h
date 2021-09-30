@@ -27,9 +27,11 @@ private: // Class' attributes
     int ballSpeed = 1;
     int barSizeX = 300;
     int combo = 0;
+    int destroyedBlocks = 0;
     float ballMovementX = ballSpeed;
     float ballMovementY = -ballSpeed;
     bool ballMoves = false;
+    bool surpriseKind = false;
     string ip;
     string port;
     string playerName;
@@ -81,6 +83,17 @@ public: // Class' functions
         this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
         this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
         this->surprise = JSON_Management::GetJSONString("Surprise", response);
+
+        if (this->surprise != "") {
+            char last = this->surprise[this->surprise.length() - 1];
+            if (last == '+') {
+                surpriseKind = true;
+            } else {
+                surpriseKind = false;
+            }
+
+            this->surprise[this->surprise.length() - 1] = ' ';
+        }
 
         if (JSON_Management::GetJSONString("BallMovement", response) == "increase") {
             if (ballSpeed == 1) {
@@ -278,13 +291,22 @@ public: // Class' functions
         //Text of the last surprise
         sf::Text surpriseText;
         surpriseText.setFont(AtariClassic);
-        surpriseText.setString("Last Surprise: " + this->surprise);
+        surpriseText.setString(this->surprise);
         surpriseText.setCharacterSize(20);
         surpriseText.setFillColor(sf::Color::White);
         surpriseText.setOutlineColor(sf::Color::Black);
-        surpriseText.setOutlineThickness(2.5);
-        surpriseText.setPosition(10, 870);
+        surpriseText.setOutlineThickness(5);
+        surpriseText.setPosition(210, 870);
 
+        //Text of the surprise title
+        sf::Text surpriseTitle;
+        surpriseTitle.setFont(AtariClassic);
+        surpriseTitle.setString("Surprise:");
+        surpriseTitle.setCharacterSize(20);
+        surpriseTitle.setFillColor(sf::Color::White);
+        surpriseTitle.setOutlineColor(sf::Color::Black);
+        surpriseTitle.setOutlineThickness(5);
+        surpriseTitle.setPosition(10, 870);
 
         //Text of the ball depth
         sf::Text ballDepthText;
@@ -323,7 +345,7 @@ public: // Class' functions
                     startGameText.setPosition(280, 300);
                     startGameText.setCharacterSize(120);
 
-                    scoreText.setPosition(590, 500);
+                    scoreText.setPosition(500, 500);
                     scoreText.setCharacterSize(50);
 
                     window.draw(startGameText);
@@ -335,7 +357,6 @@ public: // Class' functions
                 }
                 if (event.key.code == sf::Keyboard::P) { //P binding to pause the program.
                     ballMoves = false;
-                    startGameText.setString("Click once to start!");
                 }
                 if (event.key.code == sf::Keyboard::Q) { //Q binding for left bar rotation.
                     thread leftRotation([&bar, this]() {
@@ -417,7 +438,7 @@ public: // Class' functions
                         combo++;
                     }
                 }
-                if(event.key.code == sf::Keyboard::R){ // Easter egg
+                if (event.key.code == sf::Keyboard::R) { // Easter egg
                     if (ballSpeed == 25) {
                         ballSpeed = 10;
                         combo = 50;
@@ -454,7 +475,7 @@ public: // Class' functions
                     startGameText.setPosition(280, 300);
                     startGameText.setCharacterSize(120);
 
-                    scoreText.setPosition(580, 500);
+                    scoreText.setPosition(500, 500);
                     scoreText.setCharacterSize(50);
 
                     window.draw(startGameText);
@@ -477,13 +498,15 @@ public: // Class' functions
 
             if (ballMoves) {
                 ball.move(ballMovementX, ballMovementY);
+            }else{
+                startGameText.setString("Click once to start!");
             }
             if ((ball.getPosition().x + ball.getRadius()) <= 0) {
-                ballMovementX = ballMovementX * -1;
+                ballMovementX = abs(ballMovementX);
             } else if ((ball.getPosition().x + ball.getRadius()) >= width) {
-                ballMovementX = ballMovementX * -1;
-            } else if ((ball.getPosition().y + ball.getRadius()) < 0) {
-                ballMovementY = ballMovementY * -1;
+                ballMovementX = abs(ballMovementX) * -1;
+            } else if ((ball.getPosition().y + ball.getRadius()) < 50) {
+                ballMovementY = abs(ballMovementY);
             } else if ((ball.getPosition().y + ball.getRadius()) > height) {
                 sf::sleep(sf::seconds(2));
 
@@ -511,7 +534,7 @@ public: // Class' functions
                     startGameText.setPosition(280, 300);
                     startGameText.setCharacterSize(120);
 
-                    scoreText.setPosition(580, 500);
+                    scoreText.setPosition(500, 500);
                     scoreText.setCharacterSize(50);
 
                     window.draw(startGameText);
@@ -597,24 +620,6 @@ public: // Class' functions
                             updateInterface();
                         });
                         t.detach();
-
-                        if (matrix.size() == 4) {
-                            window.clear();
-                            window.draw(gameBackgroundSprite);
-                            startGameText.setString("You Won!");
-                            startGameText.setFillColor(sf::Color::Green);
-                            startGameText.setPosition(300, 300);
-                            startGameText.setCharacterSize(120);
-
-                            scoreText.setPosition(580, 500);
-                            scoreText.setCharacterSize(50);
-
-                            window.draw(startGameText);
-                            window.draw(scoreText);
-                            window.display();
-                            sf::sleep(sf::seconds(5));
-                            window.close();
-                        }
                     }
                 }
             }
@@ -637,8 +642,16 @@ public: // Class' functions
             // Drawing of the ip and port text
             window.draw(ipPortText);
 
+            // Drawing of the surprise title text
+            window.draw(surpriseTitle);
+
             // Drawing of the surprise text
-            surpriseText.setString("Last Surprise: " + this->surprise);
+            if(surpriseKind){
+                surpriseText.setFillColor(sf::Color::Green);
+            }else{
+                surpriseText.setFillColor(sf::Color::Red);
+            }
+            surpriseText.setString(this->surprise);
             window.draw(surpriseText);
 
             // Drawing of the player lives text
@@ -650,6 +663,9 @@ public: // Class' functions
             window.draw(ballDepthText);
 
             //Drawing of the blocks
+
+            destroyedBlocks = 0;
+
             for (int i = 0; i < matrix.size(); i++) {
                 string blockInfo = matrix[i];
                 vector<string> block;
@@ -695,7 +711,27 @@ public: // Class' functions
                     }
 
                     window.draw(blockShape);
+                }else{
+                    destroyedBlocks++;
                 }
+            }
+
+            if(destroyedBlocks == (matrix.size()-4)){
+                window.clear();
+                window.draw(gameBackgroundSprite);
+                startGameText.setString("You Won!");
+                startGameText.setFillColor(sf::Color::Green);
+                startGameText.setPosition(300, 300);
+                startGameText.setCharacterSize(120);
+
+                scoreText.setPosition(500, 500);
+                scoreText.setCharacterSize(50);
+
+                window.draw(startGameText);
+                window.draw(scoreText);
+                window.display();
+                sf::sleep(sf::seconds(5));
+                window.close();
             }
 
             bar.setSize(sf::Vector2f(barSizeX, 25));

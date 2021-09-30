@@ -22,7 +22,7 @@ public:
      */
     Player(){
         this->score = 0;
-        this->lives = 3;
+        this->lives = 20;
     }
 
     int getScore() const {
