@@ -119,6 +119,7 @@ void *SocketServer::clientController(void *obj) {
             collisionMessage->setMatrix(GameManager::getInstance()->getMatrix().matrixToString());
             collisionMessage->setScore(to_string(GameManager::getInstance()->getPlayer().getScore()));
             collisionMessage->setBarSize(to_string(GameManager::getInstance()->getBar().getSize()));
+            collisionMessage->setSurprise(GameManager::getInstance()->getSurprise());
             collisionMessage->setDepth(to_string(GameManager::getInstance()->getBall().getDepth()));
             collisionMessage->setLives(to_string(GameManager::getInstance()->getPlayer().getLives()));
             collisionMessage->setBallMovement(GameManager::getInstance()->getBall().getMovementChange());

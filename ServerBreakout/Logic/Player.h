@@ -49,6 +49,13 @@ public:
     }
 
     /**
+     * @brief Function to decrease the score.
+     */
+    void decreaseScore(int decrease) {
+        this->score -= decrease;
+    }
+
+    /**
      * @brief Function to increase the lives.
      */
     void increaseLives() {
@@ -61,6 +68,7 @@ public:
     void decreaseLives() {
         this->lives--;
     }
+
 };
 
 #endif //SERVERBREAKOUT_PLAYER_H

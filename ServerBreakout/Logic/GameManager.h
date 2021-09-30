@@ -24,6 +24,7 @@ private:
     Ball ball;
     Matrix matrix;
     Player player;
+    string surprise = "";
     static GameManager *instance;
 
     /**
@@ -151,6 +152,14 @@ public:
         this->player = player;
     }
 
+    const string getSurprise() const {
+        return surprise;
+    }
+
+    void setSurprise(const string &surprise) {
+        this->surprise = surprise;
+    }
+
     const Bar getBar() const {
         return bar;
     }
@@ -213,20 +222,40 @@ public:
             ball.setDepth(0);
         } else if ((matrix.getElement(x, y)->getLinkedlist()->getElement(x, y)->getBlock()->getType()) == 4) {
             srand(time(NULL));
-            int surprise = rand() % 4;
+            int surprise = rand() % 8;
 
             switch (surprise) {
                 case 0:
                     bar.increaseSize();
+                    this->surprise = "Bar Size (+)";
                     break;
                 case 1:
                     bar.decreaseSize();
+                    this->surprise = "Increase Size";
                     break;
                 case 2:
                     ball.setMovementChange("increase");
+                    this->surprise = "Increase Speed";
                     break;
                 case 3:
                     ball.setMovementChange("decrease");
+                    this->surprise = "Decrease Speed";
+                    break;
+                case 4:
+                    player.increaseLives();
+                    this->surprise = "Lives (+1)";
+                    break;
+                case 5:
+                    player.decreaseLives();
+                    this->surprise = "Lives (-1)";
+                    break;
+                case 6:
+                    player.increaseScore(200);
+                    this->surprise = "Score (+200)";
+                    break;
+                case 7:
+                    player.decreaseScore(200);
+                    this->surprise = "Score (-200)";
                     break;
             }
 

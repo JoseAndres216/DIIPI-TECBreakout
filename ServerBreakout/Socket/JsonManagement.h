@@ -74,6 +74,9 @@ public:
         writer.Key("Lives");
         writer.String(message->getLives().c_str());
 
+        writer.Key("Surprise");
+        writer.String(message->getSurprise().c_str());
+
         writer.Key("Depth");
         writer.String(message->getDepth().c_str());
 

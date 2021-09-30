@@ -29,6 +29,8 @@ private:
 
     string ballMovement;
 
+    string surprise;
+
 public:
 
     const string &getDepth() const {
@@ -54,6 +56,14 @@ public:
 
     void setScore(const string &score) {
         TypeMessage::score = score;
+    }
+
+    const string &getSurprise() const {
+        return surprise;
+    }
+
+    void setSurprise(const string &surprise) {
+        TypeMessage::surprise = surprise;
     }
 
     const string &getBallMovement() const {

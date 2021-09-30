@@ -33,6 +33,7 @@ private: // Class' attributes
     string ip;
     string port;
     string playerName;
+    string surprise = "";
     vector<string> matrix;
 
 public: // Class' functions
@@ -79,6 +80,7 @@ public: // Class' functions
         this->lives = stoi(JSON_Management::GetJSONString("Lives", response));
         this->ballDepth = stoi(JSON_Management::GetJSONString("Depth", response));
         this->barSizeX = stoi(JSON_Management::GetJSONString("BarSize", response));
+        this->surprise = JSON_Management::GetJSONString("Surprise", response);
 
         if (JSON_Management::GetJSONString("BallMovement", response) == "increase") {
             if (ballSpeed == 1) {
@@ -271,7 +273,18 @@ public: // Class' functions
         ipPortText.setFillColor(sf::Color::Green);
         ipPortText.setOutlineColor(sf::Color::Black);
         ipPortText.setOutlineThickness(2.5);
-        ipPortText.setPosition(10, 880);
+        ipPortText.setPosition(640, 880);
+
+        //Text of the last surprise
+        sf::Text surpriseText;
+        surpriseText.setFont(AtariClassic);
+        surpriseText.setString("Last Surprise: " + this->surprise);
+        surpriseText.setCharacterSize(20);
+        surpriseText.setFillColor(sf::Color::White);
+        surpriseText.setOutlineColor(sf::Color::Black);
+        surpriseText.setOutlineThickness(2.5);
+        surpriseText.setPosition(10, 870);
+
 
         //Text of the ball depth
         sf::Text ballDepthText;
@@ -623,6 +636,10 @@ public: // Class' functions
 
             // Drawing of the ip and port text
             window.draw(ipPortText);
+
+            // Drawing of the surprise text
+            surpriseText.setString("Last Surprise: " + this->surprise);
+            window.draw(surpriseText);
 
             // Drawing of the player lives text
             livesText.setString("Lives: " + to_string(this->lives));
