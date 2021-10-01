@@ -255,7 +255,9 @@ public:
                     break;
                 case 6:
                     if ((player.getScore() > 305 and player.getScore() < 500) or
-                        (player.getScore() > 805 and player.getScore() < 1000)) {
+                        (player.getScore() > 805 and player.getScore() < 1000) or
+                        (player.getScore() > 1305 and player.getScore() < 1500) or
+                        (player.getScore() > 1805 and player.getScore() < 2000)) {
                         this->player.increaseLives();
                     }
                     player.increaseScore(200);
@@ -265,7 +267,9 @@ public:
                     if (this->player.getScore() >= 200) {
                         player.decreaseScore(200);
                         if ((player.getScore() > 505 and player.getScore() < 700) or
-                            (player.getScore() > 1005 and player.getScore() < 1200)) {
+                            (player.getScore() > 1005 and player.getScore() < 1200) or
+                            (player.getScore() > 1505 and player.getScore() < 1700) or
+                            (player.getScore() > 2005 and player.getScore() < 2200)) {
                             this->player.decreaseLives();
                         }
                         this->surprise = "200 Score-";
@@ -287,13 +291,15 @@ public:
             ball.increaseDepth();
         }
 
-        if ((this->player.getScore() % 100) == 0 or (this->player.getScore() % 100) == 5) {
+        if ((this->player.getScore() % 200) == 0 or (this->player.getScore() % 200) == 5) {
             bar.increaseSize();
             this->player.increaseScore(10);
         }
 
         if ((this->player.getScore() >= 500 and this->player.getScore() < 505) or
-            (this->player.getScore() >= 1000 and this->player.getScore() < 1005)) {
+            (this->player.getScore() >= 1000 and this->player.getScore() < 1005) or
+            (this->player.getScore() >= 1500 and this->player.getScore() < 1505) or
+            (this->player.getScore() >= 2000 and this->player.getScore() < 2005)) {
             this->player.increaseLives();
             this->player.increaseScore(10);
         }

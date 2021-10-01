@@ -122,11 +122,19 @@ public:
      * @param posX
      * @param posY
      */
-    void deleteElement(int posX, int posY) {
+    bool deleteElement(int posX, int posY) {
         if (isElement(posX, posY)) {
             Node *element = getElement(posX, posY);
-            if(element->getBlock()->getType() != 6){
+            if (element->getBlock()->getType() != 6) {
+                int lastRes = element->getBlock()->getResistance();
                 element->getBlock()->decreaseResistance();
+                if (lastRes == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
             }
         } else {
             cerr << "Couldn't find the element.";

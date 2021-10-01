@@ -31,6 +31,8 @@ private:
 
     string surprise;
 
+    string win;
+
 public:
 
     const string &getDepth() const {
@@ -88,6 +90,14 @@ public:
 
     void setMatrix(const string &matrix) {
         TypeMessage::matrix = matrix;
+    }
+
+    const string &getWin() const {
+        return win;
+    }
+
+    void setWin(const string &win) {
+        TypeMessage::win = win;
     }
 
 };

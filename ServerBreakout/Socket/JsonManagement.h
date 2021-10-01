@@ -80,6 +80,9 @@ public:
         writer.Key("Depth");
         writer.String(message->getDepth().c_str());
 
+        writer.Key("Win");
+        writer.String(message->getWin().c_str());
+
         writer.EndObject();
 
         return buffer.GetString();

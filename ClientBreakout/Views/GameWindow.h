@@ -27,11 +27,11 @@ private: // Class' attributes
     int ballSpeed = 1;
     int barSizeX = 300;
     int combo = 0;
-    int destroyedBlocks = 0;
     float ballMovementX = ballSpeed;
     float ballMovementY = -ballSpeed;
     bool ballMoves = false;
     bool surpriseKind = false;
+    bool won;
     string ip;
     string port;
     string playerName;
@@ -63,6 +63,9 @@ public: // Class' functions
     void updateMatrix() {
         string response = Client::getInstance()->getResponse();
         string updatedMatrix = JSON_Management::GetJSONString("Matrix", response);
+        if(JSON_Management::GetJSONString("Win", response) == "TRUE"){
+            this->won = true;
+        }
         this->matrix.clear();
         stringstream ss(updatedMatrix);
 
@@ -102,12 +105,6 @@ public: // Class' functions
             } else if (ballSpeed == 2) {
                 ballSpeed = 5;
                 combo = 25;
-            } else if (ballSpeed == 5) {
-                ballSpeed = 10;
-                combo = 50;
-            } else if (ballSpeed == 10) {
-                ballSpeed = 25;
-                combo = 100;
             }
 
             if (ballMovementX > 0 and ballMovementY > 0) {
@@ -125,13 +122,7 @@ public: // Class' functions
             }
 
         } else if (JSON_Management::GetJSONString("BallMovement", response) == "decrease") {
-            if (ballSpeed == 25) {
-                ballSpeed = 10;
-                combo = 50;
-            } else if (ballSpeed == 10) {
-                ballSpeed = 5;
-                combo = 25;
-            } else if (ballSpeed == 5) {
+            if (ballSpeed == 5) {
                 ballSpeed = 2;
                 combo = 5;
             } else if (ballSpeed == 2) {
@@ -384,12 +375,6 @@ public: // Class' functions
                         } else if (ballSpeed == 2) {
                             ballSpeed = 5;
                             combo = 25;
-                        } else if (ballSpeed == 5) {
-                            ballSpeed = 10;
-                            combo = 50;
-                        } else if (ballSpeed == 10) {
-                            ballSpeed = 25;
-                            combo = 100;
                         }
 
                         ballMovementX = -ballSpeed;
@@ -424,12 +409,6 @@ public: // Class' functions
                         } else if (ballSpeed == 2) {
                             ballSpeed = 5;
                             combo = 25;
-                        } else if (ballSpeed == 5) {
-                            ballSpeed = 10;
-                            combo = 50;
-                        } else if (ballSpeed == 10) {
-                            ballSpeed = 25;
-                            combo = 100;
                         }
 
                         ballMovementX = ballSpeed;
@@ -439,13 +418,7 @@ public: // Class' functions
                     }
                 }
                 if (event.key.code == sf::Keyboard::R) { // Easter egg
-                    if (ballSpeed == 25) {
-                        ballSpeed = 10;
-                        combo = 50;
-                    } else if (ballSpeed == 10) {
-                        ballSpeed = 5;
-                        combo = 25;
-                    } else if (ballSpeed == 5) {
+                    if (ballSpeed == 5) {
                         ballSpeed = 2;
                         combo = 5;
                     } else if (ballSpeed == 2) {
@@ -496,9 +469,27 @@ public: // Class' functions
                 }
             }
 
+            if(this->won){
+                window.clear();
+                window.draw(gameBackgroundSprite);
+                startGameText.setString("You Won!");
+                startGameText.setFillColor(sf::Color::Green);
+                startGameText.setPosition(300, 300);
+                startGameText.setCharacterSize(120);
+
+                scoreText.setPosition(500, 500);
+                scoreText.setCharacterSize(50);
+
+                window.draw(startGameText);
+                window.draw(scoreText);
+                window.display();
+                sf::sleep(sf::seconds(5));
+                window.close();
+            }
+
             if (ballMoves) {
                 ball.move(ballMovementX, ballMovementY);
-            }else{
+            } else {
                 startGameText.setString("Click once to start!");
             }
             if ((ball.getPosition().x + ball.getRadius()) <= 0) {
@@ -548,7 +539,8 @@ public: // Class' functions
                 }
 
                 // Collision with bar
-            } else if ((ball.getPosition().y + ball.getRadius()) == bar.getPosition().y and
+            } else if ((ball.getPosition().y + ball.getRadius()) >= bar.getPosition().y and
+                       (ball.getPosition().y + ball.getRadius()) <= (bar.getPosition().y + bar.getSize().y) and
                        (ball.getPosition().x + ball.getRadius()) >= bar.getPosition().x and
                        (ball.getPosition().x + ball.getRadius()) <= (bar.getPosition().x + bar.getSize().x)) {
                 ballMovementY = ballMovementY * -1;
@@ -557,10 +549,6 @@ public: // Class' functions
                     ballSpeed = 2;
                 } else if (combo == 25) {
                     ballSpeed = 5;
-                } else if (combo == 50) {
-                    ballSpeed = 10;
-                } else if (combo == 100) {
-                    ballSpeed = 25;
                 }
 
                 if (ballMovementX > 0) {
@@ -664,9 +652,9 @@ public: // Class' functions
             window.draw(surpriseTitle);
 
             // Drawing of the surprise text
-            if(surpriseKind){
+            if (surpriseKind) {
                 surpriseText.setFillColor(sf::Color::Green);
-            }else{
+            } else {
                 surpriseText.setFillColor(sf::Color::Red);
             }
             surpriseText.setString(this->surprise);
@@ -681,8 +669,6 @@ public: // Class' functions
             window.draw(ballDepthText);
 
             //Drawing of the blocks
-
-            destroyedBlocks = 0;
 
             for (int i = 0; i < matrix.size(); i++) {
                 string blockInfo = matrix[i];
@@ -729,27 +715,7 @@ public: // Class' functions
                     }
 
                     window.draw(blockShape);
-                }else{
-                    destroyedBlocks++;
                 }
-            }
-
-            if(destroyedBlocks == (matrix.size()-4)){
-                window.clear();
-                window.draw(gameBackgroundSprite);
-                startGameText.setString("You Won!");
-                startGameText.setFillColor(sf::Color::Green);
-                startGameText.setPosition(300, 300);
-                startGameText.setCharacterSize(120);
-
-                scoreText.setPosition(500, 500);
-                scoreText.setCharacterSize(50);
-
-                window.draw(startGameText);
-                window.draw(scoreText);
-                window.display();
-                sf::sleep(sf::seconds(5));
-                window.close();
             }
 
             bar.setSize(sf::Vector2f(barSizeX, 25));

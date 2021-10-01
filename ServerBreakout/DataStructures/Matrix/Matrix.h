@@ -17,6 +17,7 @@ private:
     MatrixNode *head;
     MatrixNode *tail;
     int len;
+    int destroyedBlocks = 0;
 
 public:
 
@@ -27,6 +28,7 @@ public:
         head = nullptr;
         tail = nullptr;
         len = 0;
+        destroyedBlocks = 0;
     }
 
     MatrixNode *getHead() const {
@@ -39,6 +41,14 @@ public:
 
     int getLen() {
         return len;
+    }
+
+    int getDestroyedBlocks() const {
+        return destroyedBlocks;
+    }
+
+    void setDestroyedBlocks(int destroyedBlocks) {
+        Matrix::destroyedBlocks = destroyedBlocks;
     }
 
     /**
@@ -134,7 +144,10 @@ public:
      */
     void deleteElement(int posX, int posY) {
         MatrixNode *aux = getElement(posX, posY);
-        aux->getLinkedlist()->deleteElement(posX, posY);
+        if(aux->getLinkedlist()->deleteElement(posX, posY)){
+            this->destroyedBlocks++;
+        }
+        cout << "Left Blocks: " << this->destroyedBlocks << endl;
     }
 
     string matrixToString() {
