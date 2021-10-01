@@ -182,17 +182,23 @@ public:
         if (ball.getDepth() > 0) {
             if (ball.getDepth() == 1) {
                 if (y > 100) {
-                    y = y - 50;
-                    depth = true;
+                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0){
+                        y = y - 50;
+                        depth = true;
+                    }
                 }
             } else if (ball.getDepth() == 2) {
                 if (y > 150) {
-                    y = y - 100;
-                    depth = true;
+                    if((matrix.getElement(x, y-100)->getLinkedlist()->getElement(x, y-100)->getBlock()->getResistance()) != 0){
+                        y = y - 100;
+                        depth = true;
+                    }
                 }
                 if (y == 150) {
-                    y = y - 50;
-                    depth = true;
+                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0){
+                        y = y - 50;
+                        depth = true;
+                    }
                 }
             }
         }
