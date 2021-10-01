@@ -23,6 +23,7 @@ private:
     Bar bar;
     Ball ball;
     Matrix matrix;
+    int depthBlocks = 0;
     Player player;
     string surprise = "";
     static GameManager *instance;
@@ -38,6 +39,10 @@ private:
     void generateMatrix() {
         int internBlocksperRow = 2;
         int surpriseBlocksperRow = 3;
+
+        srand(time(NULL));
+        int depthBlocksPerRow = rand() % 2;
+
         int y = 100;
         for (int i = 1; i <= 6; i++) {
             matrix.addRow();
@@ -59,6 +64,16 @@ private:
                     if (aux->getBlock()->getType() == 3) {
                         aux->getBlock()->setType(5);
                         aux->getBlock()->setResistance(1);
+                    } else {
+                        j--;
+                    }
+                }
+                for (int j = 0; j < depthBlocksPerRow; j++) {
+                    Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
+                    if (aux->getBlock()->getType() == 3) {
+                        aux->getBlock()->setType(6);
+                        aux->getBlock()->setResistance(1);
+                        this->depthBlocks++;
                     } else {
                         j--;
                     }
@@ -87,13 +102,21 @@ private:
                         j--;
                     }
                 }
+                for (int j = 0; j < depthBlocksPerRow; j++) {
+                    Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
+                    if (aux->getBlock()->getType() == 2) {
+                        aux->getBlock()->setType(6);
+                        aux->getBlock()->setResistance(1);
+                        this->depthBlocks++;
+                    } else {
+                        j--;
+                    }
+                }
                 y += 50;
             } else {
                 for (int j = 0; j <= 15; j++) {
                     matrix.addElement(i, (j * 100), y, 1);
                 }
-                matrix.getTail()->getLinkedlist()->getHead()->getBlock()->setType(6);
-                matrix.getTail()->getLinkedlist()->getTail()->getBlock()->setType(6);
                 for (int j = 0; j < surpriseBlocksperRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if (aux->getBlock()->getType() == 1) {
@@ -112,6 +135,16 @@ private:
                         } else {
                             j--;
                         }
+                    }
+                }
+                for (int j = 0; j < depthBlocksPerRow; j++) {
+                    Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
+                    if (aux->getBlock()->getType() == 1) {
+                        aux->getBlock()->setType(6);
+                        aux->getBlock()->setResistance(1);
+                        this->depthBlocks++;
+                    } else {
+                        j--;
                     }
                 }
                 y += 50;
@@ -174,6 +207,14 @@ public:
 
     void setBall(const Ball &ball) {
         this->ball = ball;
+    }
+
+    int getDepthBlocks() const {
+        return depthBlocks;
+    }
+
+    void setDepthBlocks(int depthBlocks) {
+        GameManager::depthBlocks = depthBlocks;
     }
 
     void collideBlock(int x, int y) {
@@ -323,6 +364,5 @@ public:
 };
 
 GameManager *GameManager::instance = 0;
-
 
 #endif //SERVERBREAKOUT_GAMEMANAGER_H

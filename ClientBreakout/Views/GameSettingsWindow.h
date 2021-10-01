@@ -293,7 +293,7 @@ public: // Class' functions
                             window.draw(barBehaviorText);
 
                             window.display();
-                            sf::sleep(sf::seconds(35));
+                            sf::sleep(sf::seconds(40));
                             window.close();
                             GameWindow *window = new GameWindow(this->ip, this->port, this->playerName);
                             window->start();

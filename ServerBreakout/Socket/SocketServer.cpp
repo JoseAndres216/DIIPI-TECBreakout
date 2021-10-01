@@ -116,7 +116,7 @@ void *SocketServer::clientController(void *obj) {
 
             GameManager::getInstance()->collideBlock(stoi(x), stoi(y));
             auto collisionMessage = new TypeMessage();
-            if(GameManager::getInstance()->getMatrix().getDestroyedBlocks() == 92){
+            if(GameManager::getInstance()->getMatrix().getDestroyedBlocks() == (96 - GameManager::getInstance()->getDepthBlocks())){
                 collisionMessage->setWin("TRUE");
             }
             collisionMessage->setMatrix(GameManager::getInstance()->getMatrix().matrixToString());
