@@ -31,7 +31,7 @@ private: // Class' attributes
     float ballMovementY = -ballSpeed;
     bool ballMoves = false;
     bool surpriseKind = false;
-    bool won;
+    bool won = false;
     string ip;
     string port;
     string playerName;
@@ -63,7 +63,7 @@ public: // Class' functions
     void updateMatrix() {
         string response = Client::getInstance()->getResponse();
         string updatedMatrix = JSON_Management::GetJSONString("Matrix", response);
-        if(JSON_Management::GetJSONString("Win", response) == "TRUE"){
+        if (JSON_Management::GetJSONString("Win", response) == "TRUE") {
             this->won = true;
         }
         this->matrix.clear();
@@ -144,7 +144,6 @@ public: // Class' functions
                 ballMovementY = -ballSpeed;
             }
         }
-
     }
 
     /**
@@ -469,7 +468,7 @@ public: // Class' functions
                 }
             }
 
-            if(this->won){
+            if (this->won) {
                 window.clear();
                 window.draw(gameBackgroundSprite);
                 startGameText.setString("You Won!");
@@ -626,110 +625,110 @@ public: // Class' functions
                             sf::sleep(sf::seconds(5));
                             window.close();
                             break;
+                        }
                     }
                 }
             }
+            
+                window.clear();
 
-            window.clear();
+                // Drawing of the background image
+                window.draw(gameBackgroundSprite);
 
-            // Drawing of the background image
-            window.draw(gameBackgroundSprite);
+                // Drawing of the player name text
+                window.draw(playerNameText);
 
-            // Drawing of the player name text
-            window.draw(playerNameText);
+                // Drawing of the player score text
+                scoreText.setString("Score: " + to_string(this->score));
+                window.draw(scoreText);
 
-            // Drawing of the player score text
-            scoreText.setString("Score: " + to_string(this->score));
-            window.draw(scoreText);
+                // Drawing of the start game text
+                window.draw(startGameText);
 
-            // Drawing of the start game text
-            window.draw(startGameText);
+                // Drawing of the ip and port text
+                window.draw(ipPortText);
 
-            // Drawing of the ip and port text
-            window.draw(ipPortText);
+                // Drawing of the surprise title text
+                window.draw(surpriseTitle);
 
-            // Drawing of the surprise title text
-            window.draw(surpriseTitle);
-
-            // Drawing of the surprise text
-            if (surpriseKind) {
-                surpriseText.setFillColor(sf::Color::Green);
-            } else {
-                surpriseText.setFillColor(sf::Color::Red);
-            }
-            surpriseText.setString(this->surprise);
-            window.draw(surpriseText);
-
-            // Drawing of the player lives text
-            livesText.setString("Lives: " + to_string(this->lives));
-            window.draw(livesText);
-
-            // Drawing of the ball depth text
-            ballDepthText.setString("Ball depth: " + to_string(this->ballDepth));
-            window.draw(ballDepthText);
-
-            //Drawing of the blocks
-
-            for (int i = 0; i < matrix.size(); i++) {
-                string blockInfo = matrix[i];
-                vector<string> block;
-
-                stringstream ss(blockInfo);
-
-                while (ss.good()) {
-                    string substr;
-                    getline(ss, substr, ',');
-                    block.push_back(substr);
+                // Drawing of the surprise text
+                if (surpriseKind) {
+                    surpriseText.setFillColor(sf::Color::Green);
+                } else {
+                    surpriseText.setFillColor(sf::Color::Red);
                 }
+                surpriseText.setString(this->surprise);
+                window.draw(surpriseText);
 
-                int blockX = stoi(block[0]);
-                int blockY = stoi(block[1]);
-                int blockType = stoi(block[2]);
-                int blockResistance = stoi(block[3]);
+                // Drawing of the player lives text
+                livesText.setString("Lives: " + to_string(this->lives));
+                window.draw(livesText);
 
-                if (blockResistance != 0) {
-                    sf::RectangleShape blockShape(sf::Vector2f(100, 50));
-                    blockShape.setPosition(blockX, blockY);
-                    if (blockType == 1) {
-                        blockShape.setTexture(&singleBlockTexture);
-                    } else if (blockType == 2) {
-                        if (blockResistance == 1) {
-                            blockShape.setTexture(&doubleBlockR1Texture);
-                        } else {
-                            blockShape.setTexture(&doubleBlockTexture);
-                        }
-                    } else if (blockType == 3) {
-                        if (blockResistance == 1) {
-                            blockShape.setTexture(&tripleBlockR1texture);
-                        } else if (blockResistance == 2) {
-                            blockShape.setTexture(&tripleBlockR2Texture);
-                        } else {
-                            blockShape.setTexture(&tripleBlockTexture);
-                        }
-                    } else if (blockType == 4) {
-                        blockShape.setTexture(&surpriseBlockTexture);
-                    } else if (blockType == 5) {
-                        blockShape.setTexture(&internBlockTexture);
-                    } else if (blockType == 6) {
-                        blockShape.setTexture(&depthBlockTexture);
+                // Drawing of the ball depth text
+                ballDepthText.setString("Ball depth: " + to_string(this->ballDepth));
+                window.draw(ballDepthText);
+
+                //Drawing of the blocks
+
+                for (int i = 0; i < matrix.size(); i++) {
+                    string blockInfo = matrix[i];
+                    vector<string> block;
+
+                    stringstream ss(blockInfo);
+
+                    while (ss.good()) {
+                        string substr;
+                        getline(ss, substr, ',');
+                        block.push_back(substr);
                     }
 
-                    window.draw(blockShape);
+                    int blockX = stoi(block[0]);
+                    int blockY = stoi(block[1]);
+                    int blockType = stoi(block[2]);
+                    int blockResistance = stoi(block[3]);
+
+                    if (blockResistance != 0) {
+                        sf::RectangleShape blockShape(sf::Vector2f(100, 50));
+                        blockShape.setPosition(blockX, blockY);
+                        if (blockType == 1) {
+                            blockShape.setTexture(&singleBlockTexture);
+                        } else if (blockType == 2) {
+                            if (blockResistance == 1) {
+                                blockShape.setTexture(&doubleBlockR1Texture);
+                            } else {
+                                blockShape.setTexture(&doubleBlockTexture);
+                            }
+                        } else if (blockType == 3) {
+                            if (blockResistance == 1) {
+                                blockShape.setTexture(&tripleBlockR1texture);
+                            } else if (blockResistance == 2) {
+                                blockShape.setTexture(&tripleBlockR2Texture);
+                            } else {
+                                blockShape.setTexture(&tripleBlockTexture);
+                            }
+                        } else if (blockType == 4) {
+                            blockShape.setTexture(&surpriseBlockTexture);
+                        } else if (blockType == 5) {
+                            blockShape.setTexture(&internBlockTexture);
+                        } else if (blockType == 6) {
+                            blockShape.setTexture(&depthBlockTexture);
+                        }
+
+                        window.draw(blockShape);
+                    }
                 }
+
+                bar.setSize(sf::Vector2f(barSizeX, 25));
+                if (bar.getSize().x > 0) {
+                    window.draw(bar);
+                }
+
+                // Drawing of the ball
+                window.draw(ball);
+
+                window.display();
             }
-
-            bar.setSize(sf::Vector2f(barSizeX, 25));
-            if (bar.getSize().x > 0) {
-                window.draw(bar);
-            }
-
-            // Drawing of the ball
-            window.draw(ball);
-
-            window.display();
         }
-    }
-
-};
+    };
 
 #endif //CLIENTBREAKOUT_GAMEWINDOW_H

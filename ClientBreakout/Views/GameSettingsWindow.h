@@ -143,6 +143,86 @@ public: // Class' functions
         playText.setOutlineThickness(5);
         playText.setPosition(520, 800);
 
+        //Text of the rules binding
+        sf::Text htpText;
+        htpText.setFont(AtariClassic);
+        htpText.setString("How to play?");
+        htpText.setCharacterSize(50);
+        htpText.setFillColor(sf::Color::White);
+        htpText.setOutlineColor(sf::Color::Black);
+        htpText.setOutlineThickness(5);
+        htpText.setPosition(520, 50);
+
+        //Text of the single block binding
+        sf::Text singleBlockText;
+        singleBlockText.setFont(AtariClassic);
+        singleBlockText.setString("1 Hit to destroy");
+        singleBlockText.setCharacterSize(20);
+        singleBlockText.setFillColor(sf::Color::White);
+        singleBlockText.setOutlineColor(sf::Color::Black);
+        singleBlockText.setOutlineThickness(5);
+        singleBlockText.setPosition(400, 230);
+
+        //Text of the double block block binding
+        sf::Text doubleBlockText;
+        doubleBlockText.setFont(AtariClassic);
+        doubleBlockText.setString("2 Hits to destroy");
+        doubleBlockText.setCharacterSize(20);
+        doubleBlockText.setFillColor(sf::Color::White);
+        doubleBlockText.setOutlineColor(sf::Color::Black);
+        doubleBlockText.setOutlineThickness(5);
+        doubleBlockText.setPosition(400, 355);
+
+        //Text of the triple block binding
+        sf::Text tripleBlockText;
+        tripleBlockText.setFont(AtariClassic);
+        tripleBlockText.setString("3 Hits to destroy");
+        tripleBlockText.setCharacterSize(20);
+        tripleBlockText.setFillColor(sf::Color::White);
+        tripleBlockText.setOutlineColor(sf::Color::Black);
+        tripleBlockText.setOutlineThickness(5);
+        tripleBlockText.setPosition(400, 485);
+
+        //Text of the surprise block binding
+        sf::Text surpriseBlockText;
+        surpriseBlockText.setFont(AtariClassic);
+        surpriseBlockText.setString("Gives surprise events");
+        surpriseBlockText.setCharacterSize(20);
+        surpriseBlockText.setFillColor(sf::Color::White);
+        surpriseBlockText.setOutlineColor(sf::Color::Black);
+        surpriseBlockText.setOutlineThickness(5);
+        surpriseBlockText.setPosition(950, 230);
+
+        //Text of the inside block binding
+        sf::Text insideBlockText;
+        insideBlockText.setFont(AtariClassic);
+        insideBlockText.setString("Destroy it with depth!");
+        insideBlockText.setCharacterSize(20);
+        insideBlockText.setFillColor(sf::Color::White);
+        insideBlockText.setOutlineColor(sf::Color::Black);
+        insideBlockText.setOutlineThickness(5);
+        insideBlockText.setPosition(950, 355);
+
+        //Text of the depth block binding
+        sf::Text depthBlockText;
+        depthBlockText.setFont(AtariClassic);
+        depthBlockText.setString("Increases ball depth");
+        depthBlockText.setCharacterSize(20);
+        depthBlockText.setFillColor(sf::Color::White);
+        depthBlockText.setOutlineColor(sf::Color::Black);
+        depthBlockText.setOutlineThickness(5);
+        depthBlockText.setPosition(950, 485);
+
+        //Text of the bar behavior binding
+        sf::Text barBehaviorText;
+        barBehaviorText.setFont(AtariClassic);
+        barBehaviorText.setString("To move the game bar. Avoid loosing balls!");
+        barBehaviorText.setCharacterSize(22);
+        barBehaviorText.setFillColor(sf::Color::White);
+        barBehaviorText.setOutlineColor(sf::Color::Black);
+        barBehaviorText.setOutlineThickness(5);
+        barBehaviorText.setPosition(365, 630);
+
         //Text of the play binding
         sf::Text warningText;
         warningText.setFont(AtariClassic);
@@ -197,12 +277,20 @@ public: // Class' functions
 
                             window.clear();
 
-                            playText.setString("Loading game! Please wait...");
-                            playText.setFillColor(sf::Color::Green);
-                            playText.setPosition(300, 400);
+                            playText.setString("Loading game...");
+                            playText.setFillColor(sf::Color::White);
+                            playText.setPosition(525, 800);
 
                             window.draw(loadingBackgroundSprite);
                             window.draw(playText);
+                            window.draw(htpText);
+                            window.draw(singleBlockText);
+                            window.draw(doubleBlockText);
+                            window.draw(tripleBlockText);
+                            window.draw(surpriseBlockText);
+                            window.draw(insideBlockText);
+                            window.draw(depthBlockText);
+                            window.draw(barBehaviorText);
 
                             window.display();
                             sf::sleep(sf::seconds(35));
