@@ -252,7 +252,7 @@ public:
                     this->surprise = "Lives+";
                     break;
                 case 5:
-                    if (this->player.getLives() >= 2) {
+                    if (this->player.getLives() > 1) {
                         player.decreaseLives();
                         this->surprise = "Lives-";
                     } else {
@@ -302,11 +302,8 @@ public:
             this->player.increaseScore(10);
         }
 
-        if ((this->player.getScore() >= 500 and this->player.getScore() < 505) or
-            (this->player.getScore() >= 1000 and this->player.getScore() < 1005) or
-            (this->player.getScore() >= 1500 and this->player.getScore() < 1505) or
-            (this->player.getScore() >= 2000 and this->player.getScore() < 2005)) {
-            this->player.increaseLives();
+        if ((this->player.getScore() % 500) == 0 or (this->player.getScore() % 500) == 5) {
+            player.increaseLives();
             this->player.increaseScore(10);
         }
 

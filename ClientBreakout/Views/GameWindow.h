@@ -608,7 +608,7 @@ public: // Class' functions
                         });
                         t.detach();
 
-                        if (this->barSizeX <= 0) {
+                        if (this->lives == 0 or this->barSizeX <= 0) {
                             window.clear();
                             window.draw(gameBackgroundSprite);
                             startGameText.setString("Game Over");
@@ -629,7 +629,7 @@ public: // Class' functions
                     }
                 }
             }
-            
+
                 window.clear();
 
                 // Drawing of the background image
