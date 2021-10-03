@@ -40,9 +40,6 @@ private:
         int internBlocksperRow = 2;
         int surpriseBlocksperRow = 3;
 
-        srand(time(NULL));
-        int depthBlocksPerRow = rand() % 2;
-
         int y = 100;
         for (int i = 1; i <= 6; i++) {
             matrix.addRow();
@@ -68,6 +65,10 @@ private:
                         j--;
                     }
                 }
+
+                srand(time(NULL));
+                int depthBlocksPerRow = rand() % 3;
+
                 for (int j = 0; j < depthBlocksPerRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if (aux->getBlock()->getType() == 3) {
@@ -102,6 +103,10 @@ private:
                         j--;
                     }
                 }
+
+                srand(time(NULL));
+                int depthBlocksPerRow = rand() % 3;
+
                 for (int j = 0; j < depthBlocksPerRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if (aux->getBlock()->getType() == 2) {
@@ -137,6 +142,10 @@ private:
                         }
                     }
                 }
+
+                srand(time(NULL));
+                int depthBlocksPerRow = rand() % 3;
+
                 for (int j = 0; j < depthBlocksPerRow; j++) {
                     Node *aux = matrix.getTail()->getLinkedlist()->getRandom();
                     if (aux->getBlock()->getType() == 1) {
@@ -223,20 +232,23 @@ public:
         if (ball.getDepth() > 0) {
             if (ball.getDepth() == 1) {
                 if (y > 100) {
-                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0){
+                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0 or
+                    (matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getType()) == 6){
                         y = y - 50;
                         depth = true;
                     }
                 }
             } else if (ball.getDepth() == 2) {
                 if (y > 150) {
-                    if((matrix.getElement(x, y-100)->getLinkedlist()->getElement(x, y-100)->getBlock()->getResistance()) != 0){
+                    if((matrix.getElement(x, y-100)->getLinkedlist()->getElement(x, y-100)->getBlock()->getResistance()) != 0 or
+                       (matrix.getElement(x, y-100)->getLinkedlist()->getElement(x, y-100)->getBlock()->getType()) == 6){
                         y = y - 100;
                         depth = true;
                     }
                 }
                 if (y == 150) {
-                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0){
+                    if((matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getResistance()) != 0 or
+                       (matrix.getElement(x, y-50)->getLinkedlist()->getElement(x, y-50)->getBlock()->getType()) == 6){
                         y = y - 50;
                         depth = true;
                     }
